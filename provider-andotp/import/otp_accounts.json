@@ -1,0 +1,42 @@
+[
+  {
+    "secret": "GEZDGNBVGY3TQOJQ",
+    "issuer": "",
+    "label": "Sample HOTP",
+    "digits": 6,
+    "type": "HOTP",
+    "algorithm": "SHA1",
+    "thumbnail": "Default",
+    "last_used": 1610867673144,
+    "used_frequency": 0,
+    "counter": 5,
+    "tags": []
+  },
+  {
+    "secret": "GEZDGNBVGY3TQOJQ",
+    "issuer": "Sample Issuer",
+    "label": "Sample TOTP",
+    "digits": 6,
+    "type": "TOTP",
+    "algorithm": "SHA1",
+    "thumbnail": "Default",
+    "last_used": 1610867697155,
+    "used_frequency": 0,
+    "period": 30,
+    "tags": [
+      "Sample Tag"
+    ]
+  },
+  {
+    "secret": "GEZDGNBVGY3TQOJQ",
+    "issuer": "",
+    "label": "Sample Steam",
+    "digits": 5,
+    "type": "STEAM",
+    "algorithm": "SHA1",
+    "thumbnail": "Default",
+    "last_used": 1610867715636,
+    "used_frequency": 0,
+    "tags": []
+  }
+]

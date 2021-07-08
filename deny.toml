@@ -1,0 +1,16 @@
+[licenses]
+allow-osi-fsf-free = "both"
+exceptions = [
+    { allow = ["AGPL-3.0"], name = "otti", version = "*" },
+    { allow = ["AGPL-3.0"], name = "otti-core", version = "*" },
+    { allow = ["AGPL-3.0"], name = "otti-gen", version = "*" },
+    { allow = ["AGPL-3.0"], name = "otti-store", version = "*" },
+    { allow = ["AGPL-3.0"], name = "provider-aegis", version = "*" },
+    { allow = ["AGPL-3.0"], name = "provider-andotp", version = "*" },
+]
+
+[bans]
+skip = [
+    { name = "ansi_term", version = "=0.11.0" },
+    { name = "miniz_oxide", version = "=0.3.7" },
+]

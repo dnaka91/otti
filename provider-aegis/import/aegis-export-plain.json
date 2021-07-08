@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "header": {
+    "slots": null,
+    "params": null
+  },
+  "db": {
+    "version": 1,
+    "entries": [
+      {
+        "type": "hotp",
+        "uuid": "98fba859-bd1e-4a77-a3a1-d77845c46a9a",
+        "name": "Sample HOTP",
+        "issuer": "",
+        "icon": null,
+        "info": {
+          "secret": "GEZDGNBVGY3TQOJQ",
+          "algo": "SHA1",
+          "digits": 6,
+          "counter": 5
+        }
+      },
+      {
+        "type": "totp",
+        "uuid": "9ce07804-8fde-4e4e-999d-b5e6c828c552",
+        "name": "Sample TOTP",
+        "issuer": "Sample Issuer",
+        "group": "Sample Group",
+        "icon": null,
+        "info": {
+          "secret": "GEZDGNBVGY3TQOJQ",
+          "algo": "SHA1",
+          "digits": 6,
+          "period": 30
+        }
+      },
+      {
+        "type": "steam",
+        "uuid": "cea85ca4-0a04-4c24-bcee-f1b244f1a7a7",
+        "name": "Sample Steam",
+        "issuer": "",
+        "icon": null,
+        "info": {
+          "secret": "GEZDGNBVGY3TQOJQ",
+          "algo": "SHA1",
+          "digits": 6,
+          "period": 30
+        }
+      }
+    ]
+  }
+}
