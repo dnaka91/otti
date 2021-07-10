@@ -8,7 +8,7 @@ use crossbeam_channel::Receiver;
 use crossterm::{
     event::{Event, KeyEvent},
     execute,
-    terminal::{EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, SetTitle},
 };
 use tui::{
     backend::{Backend, CrosstermBackend},
@@ -18,7 +18,10 @@ use tui::{
 pub fn create() -> Result<Terminal<impl Backend>> {
     let stdout = RawTerminal::new(io::stdout())?;
     let stdout = AlternateScreen::new(stdout)?;
-    let backend = CrosstermBackend::new(stdout);
+    let mut backend = CrosstermBackend::new(stdout);
+
+    execute!(&mut backend, SetTitle("Otti"))?;
+
     Terminal::new(backend).map_err(Into::into)
 }
 
