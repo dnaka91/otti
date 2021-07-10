@@ -259,7 +259,7 @@ fn run() -> Result<()> {
 
             let gauge = Gauge::default()
                 .block(Block::default().borders(Borders::ALL))
-                .gauge_style(Style::default().fg(Color::Green).bg(Color::Black))
+                .gauge_style(Style::default().fg(Color::Green).bg(Color::DarkGray))
                 .label(format!("{}s", counter))
                 .percent(counter * 100 / 30);
 

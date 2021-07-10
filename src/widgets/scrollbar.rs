@@ -30,7 +30,7 @@ impl Widget for ScrollBar {
                 buf.get_mut(x, y).set_bg(if (start..end).contains(&y) {
                     Color::White
                 } else {
-                    Color::Black
+                    Color::DarkGray
                 });
             }
         }
