@@ -2,6 +2,12 @@
 
 The OTP manager for the terminal, with interactive and fancy TUI.
 
+<!-- markdownlint-disable no-inline-html -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dnaka91/gifs/dd0d5915c1f4b4897dda3e75c3753ae5e327de5f/otti.gif" width=646>
+</p>
+<!-- markdownlint-enable no-inline-html -->
+
 ## Yet another OTP account manager?
 
 I wanted an OTP manager app for the terminal that behaves similar as mobile managers but couldn't
