@@ -17,6 +17,7 @@ otti-gen = { path = "./otti-gen" }
 otti-store = { path = "./otti-store" }
 provider-aegis = { path = "./provider-aegis" }
 provider-andotp = { path = "./provider-andotp" }
+provider-authpro = { path = "./provider-authpro" }
 rpassword = "5.0.1"
 rprompt = "1.0.5"
 secrecy = "0.7.0"
@@ -27,4 +28,11 @@ tui = { version = "0.15.0", default-features = false, features = ["crossterm"] }
 lto = true
 
 [workspace]
-members = ["otti-core", "otti-gen", "otti-store", "provider-aegis", "provider-andotp"]
+members = [
+    "otti-core",
+    "otti-gen",
+    "otti-store",
+    "provider-aegis",
+    "provider-andotp",
+    "provider-authpro",
+]

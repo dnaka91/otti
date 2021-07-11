@@ -1,0 +1,121 @@
+{
+  "Authenticators": [
+    {
+      "Type": 2,
+      "Icon": null,
+      "Issuer": "Test TOTP",
+      "Username": "",
+      "Secret": "UTJYSPLDXEWZVDQ2",
+      "Algorithm": 0,
+      "Digits": 6,
+      "Period": 30,
+      "Counter": 0,
+      "Ranking": 0
+    },
+    {
+      "Type": 2,
+      "Icon": null,
+      "Issuer": "Test TOTP 2",
+      "Username": "test",
+      "Secret": "X3FBH2IGPIKACZ5H",
+      "Algorithm": 1,
+      "Digits": 9,
+      "Period": 45,
+      "Counter": 0,
+      "Ranking": 0
+    },
+    {
+      "Type": 1,
+      "Icon": "1password",
+      "Issuer": "Test HOTP",
+      "Username": "",
+      "Secret": "PGO7UI6HJZLK3AKY",
+      "Algorithm": 0,
+      "Digits": 6,
+      "Period": 30,
+      "Counter": 1,
+      "Ranking": 0
+    },
+    {
+      "Type": 1,
+      "Icon": "@c633dfec",
+      "Issuer": "Test HOTP 2",
+      "Username": "test",
+      "Secret": "LZNXAOMJBEUAM5CO",
+      "Algorithm": 2,
+      "Digits": 8,
+      "Period": 30,
+      "Counter": 1,
+      "Ranking": 0
+    },
+    {
+      "Type": 4,
+      "Icon": null,
+      "Issuer": "Test Steam",
+      "Username": "",
+      "Secret": "2US2K4PRQDHAG5NH",
+      "Algorithm": 0,
+      "Digits": 5,
+      "Period": 30,
+      "Counter": 0,
+      "Ranking": 0
+    },
+    {
+      "Type": 4,
+      "Icon": null,
+      "Issuer": "Test Steam 2",
+      "Username": "test",
+      "Secret": "USPW47FIMJRTECVN",
+      "Algorithm": 0,
+      "Digits": 5,
+      "Period": 30,
+      "Counter": 0,
+      "Ranking": 0
+    }
+  ],
+  "Categories": [
+    {
+      "Id": "49c8d71d",
+      "Name": "TOTPs",
+      "Ranking": 0
+    },
+    {
+      "Id": "614ab186",
+      "Name": "Not TOTP",
+      "Ranking": 0
+    },
+    {
+      "Id": "201a6b30",
+      "Name": "Foo",
+      "Ranking": 0
+    }
+  ],
+  "AuthenticatorCategories": [
+    {
+      "CategoryId": "49c8d71d",
+      "AuthenticatorSecret": "UTJYSPLDXEWZVDQ2",
+      "Ranking": 0
+    },
+    {
+      "CategoryId": "49c8d71d",
+      "AuthenticatorSecret": "X3FBH2IGPIKACZ5H",
+      "Ranking": 0
+    },
+    {
+      "CategoryId": "614ab186",
+      "AuthenticatorSecret": "2US2K4PRQDHAG5NH",
+      "Ranking": 0
+    },
+    {
+      "CategoryId": "201a6b30",
+      "AuthenticatorSecret": "2US2K4PRQDHAG5NH",
+      "Ranking": 0
+    }
+  ],
+  "CustomIcons": [
+    {
+      "Id": "c633dfec",
+      "Data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAANzQklUCAgI2+FP4AAAAAxJREFUCJljkJJVBAAArQBZWmGyhAAAAABJRU5ErkJggg=="
+    }
+  ]
+}

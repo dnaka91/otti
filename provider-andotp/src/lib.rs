@@ -21,9 +21,9 @@ use sha1::Sha1;
 pub enum Error {
     #[error("the import data is too short")]
     InputTooShort,
-    #[error("data decryption failed")]
+    #[error("data en-/decryption failed")]
     AesGcm(#[from] aes_gcm::Error),
-    #[error("JSON deserialization failed")]
+    #[error("JSON (de-)serialization failed")]
     Json(#[from] serde_json::Error),
 }
 
@@ -195,7 +195,7 @@ fn random_salt() -> [u8; 12] {
     if cfg!(test) {
         [0; 12]
     } else {
-        rand::thread_rng().gen::<[u8; 12]>()
+        rand::thread_rng().gen()
     }
 }
 

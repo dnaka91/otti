@@ -45,7 +45,7 @@ enum Command {
         #[structopt(short, long)]
         password: Option<String>,
         /// Provider/application that this file came from.
-        #[structopt(possible_values = &["aegis", "and-otp"])]
+        #[structopt(possible_values = &["aegis", "and-otp", "auth-pro"])]
         provider: Provider,
         /// The file to import.
         file: PathBuf,
@@ -56,7 +56,7 @@ enum Command {
         #[structopt(short, long)]
         password: Option<String>,
         /// Provider/application that this file will be imported into.
-        #[structopt(possible_values = &["aegis", "and-otp"])]
+        #[structopt(possible_values = &["aegis", "and-otp", "auth-pro"])]
         provider: Provider,
         /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
         /// folder, where the extension depends on the provider's format.
@@ -76,6 +76,8 @@ enum Provider {
     Aegis,
     /// Android OTP Authenticator.
     AndOtp,
+    /// Authenticator Pro.
+    AuthPro,
 }
 
 impl FromStr for Provider {
@@ -85,6 +87,7 @@ impl FromStr for Provider {
         Ok(match s {
             "aegis" => Self::Aegis,
             "and-otp" => Self::AndOtp,
+            "auth-pro" => Self::AuthPro,
             _ => bail!("unknown provider `{}`", s),
         })
     }
@@ -105,6 +108,13 @@ impl Provider {
                     "and-otp-export.json.aes"
                 } else {
                     "and-otp-export.json"
+                }
+            }
+            Self::AuthPro => {
+                if with_password {
+                    "auth-pro-export.authpro"
+                } else {
+                    "auth-pro-export.json"
                 }
             }
         }
@@ -135,6 +145,7 @@ fn import(password: Option<String>, provider: Provider, file: PathBuf) -> Result
     let accounts = match provider {
         Provider::Aegis => provider_aegis::load(&mut file.as_slice(), password)?,
         Provider::AndOtp => provider_andotp::load(&mut file.as_slice(), password)?,
+        Provider::AuthPro => provider_authpro::load(&mut file.as_slice(), password)?,
     };
 
     println!("Opened backup file");
@@ -169,6 +180,7 @@ fn export(file_password: Option<String>, provider: Provider, file: Option<PathBu
     match provider {
         Provider::Aegis => provider_aegis::save(&mut data, &accounts, file_password)?,
         Provider::AndOtp => provider_andotp::save(&mut data, &accounts, file_password)?,
+        Provider::AuthPro => provider_authpro::save(&mut data, &accounts, file_password)?,
     }
 
     fs::write(file, data)?;

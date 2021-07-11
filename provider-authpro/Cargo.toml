@@ -1,0 +1,24 @@
+[package]
+name = "provider-authpro"
+version = "0.1.0"
+authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
+edition = "2018"
+license = "AGPL-3.0-only"
+
+[dependencies]
+aes = "0.7.4"
+base64 = "0.13.0"
+block-modes = "0.8.1"
+bytes = "1.0.1"
+hmac = "0.11.0"
+otti-core = { path = "../otti-core" }
+pbkdf2 = "0.8.0"
+rand = "0.8.4"
+serde = { version = "1.0.126", features = ["derive"] }
+serde_json = "1.0.64"
+serde_repr = "0.1.7"
+sha-1 = "0.9.6"
+thiserror = "1.0.26"
+
+[dev-dependencies]
+pretty_assertions = "0.7.2"

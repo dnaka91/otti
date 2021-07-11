@@ -19,15 +19,15 @@ mod de;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("JSON deserialization failed")]
+    #[error("JSON (de-)serialization failed")]
     Json(#[from] serde_json::Error),
-    #[error("Cipher failed")]
+    #[error("data en-/decryption failed")]
     Aead(#[from] aes_gcm::Error),
-    #[error("The backup file can't be opened with a password")]
+    #[error("the backup file can't be opened with a password")]
     NoPasswordEntry,
-    #[error("Scrypt output length invalid")]
+    #[error("scrypt output length invalid")]
     ScryptLength(#[from] scrypt::errors::InvalidOutputLen),
-    #[error("Invalid scrypt parameters")]
+    #[error("invalid scrypt parameters")]
     ScryptParams(#[from] scrypt::errors::InvalidParams),
 }
 
