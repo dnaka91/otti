@@ -6,7 +6,7 @@
 )]
 
 use std::{
-    fs,
+    fs, io,
     path::PathBuf,
     str::FromStr,
     time::{Duration, UNIX_EPOCH},
@@ -17,7 +17,10 @@ use arboard::Clipboard;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
 use secrecy::SecretString;
-use structopt::{clap::AppSettings, StructOpt};
+use structopt::{
+    clap::{AppSettings, Shell},
+    StructOpt,
+};
 use tui::{
     layout::{Constraint, Direction, Layout},
     style::{Color, Style},
@@ -66,6 +69,12 @@ enum Command {
     Show {
         issuer: String,
         label: Option<String>,
+    },
+    /// Generate auto-completion scripts for various shells.
+    Completion {
+        /// Shell to generate an auto-completion script for.
+        #[structopt(possible_values = &Shell::variants())]
+        shell: Shell,
     },
 }
 
@@ -136,6 +145,7 @@ fn main() -> Result<()> {
             file,
         } => export(password, provider, file),
         Command::Show { issuer, label } => show(&issuer, label.as_deref()),
+        Command::Completion { shell } => completion(shell),
     })
 }
 
@@ -225,6 +235,12 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
         }
     }
 
+    Ok(())
+}
+
+#[allow(clippy::unnecessary_wraps)]
+fn completion(shell: Shell) -> Result<()> {
+    Opt::clap().gen_completions_to(env!("CARGO_BIN_NAME"), shell, &mut io::stdout().lock());
     Ok(())
 }
 
