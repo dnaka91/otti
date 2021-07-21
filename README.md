@@ -1,12 +1,23 @@
 # 🦦 Otti
 
-The OTP manager for the terminal, with interactive and fancy TUI.
+The one-time password (OTP for short) manager for the terminal, with interactive and fancy TUI.
 
 <!-- markdownlint-disable no-inline-html -->
 <p align="center">
   <img src="https://raw.githubusercontent.com/dnaka91/gifs/dd0d5915c1f4b4897dda3e75c3753ae5e327de5f/otti.gif" width=646>
 </p>
 <!-- markdownlint-enable no-inline-html -->
+
+## What's an OTP?
+
+An OTP is the abbreviation for **O**ne-**T**ime **P**assword and is usually part of a two-factor
+authentication setup. That is, when a second password is required for a login to some service as
+extra security measure.
+
+It usually involves scanning a QR-Code from the service's website or inputting it into an
+authenticator manually.
+
+For more information check out [this Wikipedia article](https://en.wikipedia.org/wiki/One-time_password).
 
 ## Yet another OTP account manager?
 
