@@ -11,6 +11,6 @@ flate2 = "1.0.20"
 orion = "0.16.0"
 otti-core = { path = "../otti-core" }
 rmp-serde = "0.15.5"
-secrecy = "0.7.0"
+secrecy = "0.8.0"
 serde = { version = "1.0.126", features = ["derive"] }
 thiserror = "1.0.26"
