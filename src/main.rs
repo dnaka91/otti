@@ -48,7 +48,7 @@ enum Command {
         #[structopt(short, long)]
         password: Option<String>,
         /// Provider/application that this file came from.
-        #[structopt(possible_values = &["aegis", "and-otp", "auth-pro"])]
+        #[structopt(possible_values = &Provider::VARIANTS)]
         provider: Provider,
         /// The file to import.
         file: PathBuf,
@@ -59,7 +59,7 @@ enum Command {
         #[structopt(short, long)]
         password: Option<String>,
         /// Provider/application that this file will be imported into.
-        #[structopt(possible_values = &["aegis", "and-otp", "auth-pro"])]
+        #[structopt(possible_values = &Provider::VARIANTS)]
         provider: Provider,
         /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
         /// folder, where the extension depends on the provider's format.
@@ -103,6 +103,8 @@ impl FromStr for Provider {
 }
 
 impl Provider {
+    const VARIANTS: [&'static str; 3] = ["aegis", "and-otp", "auth-pro"];
+
     fn export_name(self, with_password: bool) -> &'static str {
         match self {
             Self::Aegis => {
