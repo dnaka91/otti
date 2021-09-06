@@ -275,7 +275,7 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
     let data_tag = data_cipher.encrypt_in_place_detached(&data_nonce, &[], &mut data)?;
 
     let slot_key = GenericArray::from_slice(&key);
-    let slot_cipher = Aes256Gcm::new(&slot_key);
+    let slot_cipher = Aes256Gcm::new(slot_key);
     let slot_nonce = random_array();
 
     let slot_tag = slot_cipher.encrypt_in_place_detached(&slot_nonce, &[], &mut data_key)?;

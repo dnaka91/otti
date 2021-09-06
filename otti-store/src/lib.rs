@@ -176,7 +176,7 @@ fn encrypt(data: &[u8], password: &SecretString) -> Result<EncryptedFile, Error>
     let salt = Salt::default();
     let key = kdf::derive_key(&password, &salt, 3, 1 << 16, 32)?;
 
-    let data = aead::seal(&key, &data)?;
+    let data = aead::seal(&key, data)?;
 
     Ok(EncryptedFile {
         salt: salt.as_ref().to_owned(),
