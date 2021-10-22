@@ -672,7 +672,7 @@ dependencies = [
 
 [[package]]
 name = "otti"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "anyhow",
  "arboard",
@@ -694,7 +694,7 @@ dependencies = [
 
 [[package]]
 name = "otti-core"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "data-encoding",
  "percent-encoding",
@@ -707,7 +707,7 @@ dependencies = [
 
 [[package]]
 name = "otti-gen"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "hmac",
  "otti-core",
@@ -718,7 +718,7 @@ dependencies = [
 
 [[package]]
 name = "otti-store"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "directories-next",
  "flate2",
@@ -858,7 +858,7 @@ dependencies = [
 
 [[package]]
 name = "provider-aegis"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "aes-gcm",
  "base64",
@@ -876,7 +876,7 @@ dependencies = [
 
 [[package]]
 name = "provider-andotp"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "aes-gcm",
  "bytes",
@@ -893,7 +893,7 @@ dependencies = [
 
 [[package]]
 name = "provider-authpro"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "aes",
  "base64",

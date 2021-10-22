@@ -1,6 +1,6 @@
 [package]
 name = "provider-aegis"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2021"
 license = "AGPL-3.0-only"
