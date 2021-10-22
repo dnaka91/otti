@@ -2,12 +2,12 @@
 name = "otti-gen"
 version = "0.2.0"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "AGPL-3.0-only"
 
 [dependencies]
 hmac = { version = "0.11.0", features = ["std"] }
 otti-core = { path = "../otti-core" }
-sha-1 = "0.9.7"
-sha2 = "0.9.5"
-thiserror = "1.0.26"
+sha-1 = "0.9.8"
+sha2 = "0.9.8"
+thiserror = "1.0.30"

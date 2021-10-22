@@ -2,21 +2,21 @@
 name = "provider-aegis"
 version = "0.2.0"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "AGPL-3.0-only"
 
 [dependencies]
-aes-gcm = { version = "0.9.3", features = ["std"] }
+aes-gcm = { version = "0.9.4", features = ["std"] }
 base64 = "0.13.0"
-bytes = "1.0.1"
+bytes = "1.1.0"
 hex = "0.4.3"
 otti-core = { path = "../otti-core" }
 rand = "0.8.4"
-scrypt = { version = "0.7.0", default-features = false, features = ["std"] }
-serde = { version = "1.0.126", features = ["derive"] }
-serde_json = "1.0.64"
-thiserror = "1.0.26"
+scrypt = { version = "0.8.0", default-features = false, features = ["std"] }
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.68"
+thiserror = "1.0.30"
 uuid = { version = "0.8.2", features = ["v4"] }
 
 [dev-dependencies]
-pretty_assertions = "0.7.2"
+pretty_assertions = "1.0.0"

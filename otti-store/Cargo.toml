@@ -2,15 +2,15 @@
 name = "otti-store"
 version = "0.2.0"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "AGPL-3.0-only"
 
 [dependencies]
 directories-next = "2.0.0"
-flate2 = "1.0.20"
+flate2 = "1.0.22"
 orion = "0.16.0"
 otti-core = { path = "../otti-core" }
 rmp-serde = "0.15.5"
 secrecy = "0.8.0"
-serde = { version = "1.0.126", features = ["derive"] }
-thiserror = "1.0.26"
+serde = { version = "1.0.130", features = ["derive"] }
+thiserror = "1.0.30"

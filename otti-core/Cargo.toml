@@ -2,16 +2,16 @@
 name = "otti-core"
 version = "0.2.0"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "AGPL-3.0-only"
 
 [dependencies]
 data-encoding = "2.3.2"
 percent-encoding = { version = "2.1.0", optional = true }
 secrecy = { version = "0.8.0", features = ["serde"] }
-serde = { version = "1.0.126", features = ["derive"] }
-serde_qs = { version = "0.8.4", optional = true }
-thiserror = "1.0.26"
+serde = { version = "1.0.130", features = ["derive"] }
+serde_qs = { version = "0.8.5", optional = true }
+thiserror = "1.0.30"
 url = { version = "2.2.2", optional = true }
 
 [features]
