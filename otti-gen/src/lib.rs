@@ -12,9 +12,8 @@ use std::{
 };
 
 use hmac::{
-    crypto_mac::InvalidKeyLength,
-    digest::{BlockInput, FixedOutput, Reset, Update},
-    Hmac, Mac, NewMac,
+    digest::{core_api::BlockSizeUser, Digest, InvalidLength},
+    Mac, SimpleHmac,
 };
 use otti_core::ExposeSecret;
 pub use otti_core::{Key, Otp};
@@ -41,22 +40,17 @@ pub enum Error {
     Time(#[from] SystemTimeError),
     /// The provided key was too short.
     #[error("the given key is too short")]
-    KeyLength(#[from] InvalidKeyLength),
+    KeyLength(#[from] InvalidLength),
 }
-
-/// A digest like [`Sha1`] that allows to create a hash of fixed sized over any kind of input that
-/// can be represented as raw bytes.
-pub trait Digest: Update + BlockInput + FixedOutput + Reset + Default + Clone {}
-
-impl Digest for Sha1 {}
-impl Digest for Sha256 {}
-impl Digest for Sha512 {}
 
 /// Create a new OTP from the given `key`, `otp` variant and optional amount of `digits`.
 ///
 /// This operation may fail if the key is too short or the system wasn't able to provide the current
 /// time (depending on the OTP variant used).
-pub fn generate<D: Digest>(key: &Key, otp: &Otp, digits: Option<u8>) -> Result<OtpCode, Error> {
+pub fn generate<D>(key: &Key, otp: &Otp, digits: Option<u8>) -> Result<OtpCode, Error>
+where
+    D: Digest + BlockSizeUser,
+{
     let digits = digits.unwrap_or(match otp {
         Otp::Hotp { .. } | Otp::Totp { .. } => DEFAULT_DIGITS,
         Otp::Steam { .. } => DEFAULT_STEAM_DIGITS,
@@ -75,19 +69,28 @@ pub fn generate<D: Digest>(key: &Key, otp: &Otp, digits: Option<u8>) -> Result<O
     Ok(OtpCode { code, digits })
 }
 
-fn generate_hotp<D: Digest>(key: &[u8], counter: u64, digits: u8) -> Result<u32, Error> {
+fn generate_hotp<D>(key: &[u8], counter: u64, digits: u8) -> Result<u32, Error>
+where
+    D: Digest + BlockSizeUser,
+{
     let digest = mac::<D>(key, counter)?;
     let code = digit(&digest, digits);
 
     Ok(code)
 }
 
-fn generate_totp<D: Digest>(key: &[u8], window: u64, digits: u8) -> Result<u32, Error> {
+fn generate_totp<D>(key: &[u8], window: u64, digits: u8) -> Result<u32, Error>
+where
+    D: Digest + BlockSizeUser,
+{
     let time = UNIX_EPOCH.elapsed()?.as_secs();
     generate_hotp::<D>(key, time / window, digits)
 }
 
-fn generate_steam<D: Digest>(key: &[u8], period: u64, digits: u8) -> Result<String, Error> {
+fn generate_steam<D>(key: &[u8], period: u64, digits: u8) -> Result<String, Error>
+where
+    D: Digest + BlockSizeUser,
+{
     let mut code = generate_totp::<D>(key, period, digits)?;
     let mut steam = String::with_capacity(digits as usize);
 
@@ -99,10 +102,13 @@ fn generate_steam<D: Digest>(key: &[u8], period: u64, digits: u8) -> Result<Stri
     Ok(steam)
 }
 
-fn mac<D: Digest>(key: &[u8], counter: u64) -> Result<[u8; 20], Error> {
+fn mac<D>(key: &[u8], counter: u64) -> Result<[u8; 20], Error>
+where
+    D: Digest + BlockSizeUser,
+{
     let mut digest = [0_u8; 20];
 
-    let mut mac = <Hmac<D>>::new_from_slice(key)?;
+    let mut mac = <SimpleHmac<D>>::new_from_slice(key)?;
     mac.update(&counter.to_be_bytes());
     digest.copy_from_slice(&mac.finalize().into_bytes()[..20]);
 

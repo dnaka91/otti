@@ -10,14 +10,14 @@ aes = "0.7.5"
 base64 = "0.13.0"
 block-modes = "0.8.1"
 bytes = "1.1.0"
-hmac = "0.11.0"
+hmac = "0.12.0"
 otti-core = { path = "../otti-core" }
-pbkdf2 = "0.9.0"
+pbkdf2 = { version = "0.10.0", default-features = false }
 rand = "0.8.4"
-serde = { version = "1.0.130", features = ["derive"] }
-serde_json = "1.0.68"
+serde = { version = "1.0.131", features = ["derive"] }
+serde_json = "1.0.72"
 serde_repr = "0.1.7"
-sha-1 = "0.9.8"
+sha-1 = "0.10.0"
 thiserror = "1.0.30"
 
 [dev-dependencies]

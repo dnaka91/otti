@@ -8,9 +8,9 @@ license = "AGPL-3.0-only"
 [dependencies]
 directories-next = "2.0.0"
 flate2 = "1.0.22"
-orion = "0.16.0"
+orion = "0.17.0"
 otti-core = { path = "../otti-core" }
 rmp-serde = "0.15.5"
 secrecy = "0.8.0"
-serde = { version = "1.0.130", features = ["derive"] }
+serde = { version = "1.0.131", features = ["derive"] }
 thiserror = "1.0.30"

@@ -6,8 +6,8 @@ edition = "2021"
 license = "AGPL-3.0-only"
 
 [dependencies]
-hmac = { version = "0.11.0", features = ["std"] }
+hmac = { version = "0.12.0", features = ["std"] }
 otti-core = { path = "../otti-core" }
-sha-1 = "0.9.8"
-sha2 = "0.9.8"
+sha-1 = "0.10.0"
+sha2 = "0.10.0"
 thiserror = "1.0.30"
