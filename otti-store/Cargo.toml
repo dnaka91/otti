@@ -12,5 +12,5 @@ orion = "0.17.0"
 otti-core = { path = "../otti-core" }
 rmp-serde = "0.15.5"
 secrecy = "0.8.0"
-serde = { version = "1.0.131", features = ["derive"] }
+serde = { version = "1.0.133", features = ["derive"] }
 thiserror = "1.0.30"

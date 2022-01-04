@@ -7,7 +7,7 @@ resolver = "2"
 license = "AGPL-3.0-only"
 
 [dependencies]
-anyhow = "1.0.51"
+anyhow = "1.0.52"
 arboard = { version = "2.0.1", default-features = false }
 crossbeam-channel = "0.5.1"
 crossterm = "0.20.0"
