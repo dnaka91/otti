@@ -8,19 +8,16 @@
 use std::{
     fs, io,
     path::PathBuf,
-    str::FromStr,
     time::{Duration, UNIX_EPOCH},
 };
 
-use anyhow::{bail, Result};
+use anyhow::Result;
 use arboard::Clipboard;
+use clap::{ArgEnum, IntoApp, Parser, Subcommand};
+use clap_complete::Shell;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
 use secrecy::SecretString;
-use structopt::{
-    clap::{AppSettings, Shell},
-    StructOpt,
-};
 use tui::{
     layout::{Constraint, Direction, Layout},
     style::{Color, Style},
@@ -33,22 +30,22 @@ use crate::widgets::{HelpDialog, List, ListState, ScrollBar};
 mod terminal;
 mod widgets;
 
-#[derive(StructOpt)]
-#[structopt(global_setting = AppSettings::ColoredHelp)]
+#[derive(Parser)]
+#[clap(about, author, version)]
 struct Opt {
     #[structopt(subcommand)]
     cmd: Option<Command>,
 }
 
-#[derive(StructOpt)]
+#[derive(Subcommand)]
 enum Command {
     /// Import OTP accounts from another application.
     Import {
         /// Optional password if the file is protected.
-        #[structopt(short, long)]
+        #[clap(short, long)]
         password: Option<String>,
         /// Provider/application that this file came from.
-        #[structopt(possible_values = &Provider::VARIANTS)]
+        #[clap(arg_enum)]
         provider: Provider,
         /// The file to import.
         file: PathBuf,
@@ -56,10 +53,10 @@ enum Command {
     /// Export OTP accounts to another application.
     Export {
         /// Optional password to protect the file.
-        #[structopt(short, long)]
+        #[clap(short, long)]
         password: Option<String>,
         /// Provider/application that this file will be imported into.
-        #[structopt(possible_values = &Provider::VARIANTS)]
+        #[clap(arg_enum)]
         provider: Provider,
         /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
         /// folder, where the extension depends on the provider's format.
@@ -73,13 +70,13 @@ enum Command {
     /// Generate auto-completion scripts for various shells.
     Completion {
         /// Shell to generate an auto-completion script for.
-        #[structopt(possible_values = &Shell::variants())]
+        #[clap(arg_enum)]
         shell: Shell,
     },
 }
 
 /// Possible supported providers for data import/export.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, ArgEnum)]
 enum Provider {
     /// Aegis authenticator.
     Aegis,
@@ -89,22 +86,7 @@ enum Provider {
     AuthPro,
 }
 
-impl FromStr for Provider {
-    type Err = anyhow::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(match s {
-            "aegis" => Self::Aegis,
-            "and-otp" => Self::AndOtp,
-            "auth-pro" => Self::AuthPro,
-            _ => bail!("unknown provider `{}`", s),
-        })
-    }
-}
-
 impl Provider {
-    const VARIANTS: [&'static str; 3] = ["aegis", "and-otp", "auth-pro"];
-
     fn export_name(self, with_password: bool) -> &'static str {
         match self {
             Self::Aegis => {
@@ -133,7 +115,7 @@ impl Provider {
 }
 
 fn main() -> Result<()> {
-    let opt = Opt::from_args();
+    let opt = Opt::parse();
 
     opt.cmd.map_or_else(run, |cmd| match cmd {
         Command::Import {
@@ -242,7 +224,12 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
 
 #[allow(clippy::unnecessary_wraps)]
 fn completion(shell: Shell) -> Result<()> {
-    Opt::clap().gen_completions_to(env!("CARGO_BIN_NAME"), shell, &mut io::stdout().lock());
+    clap_complete::generate(
+        shell,
+        &mut Opt::into_app(),
+        env!("CARGO_BIN_NAME"),
+        &mut io::stdout().lock(),
+    );
     Ok(())
 }
 
