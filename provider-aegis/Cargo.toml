@@ -11,12 +11,12 @@ base64 = "0.13.0"
 bytes = "1.1.0"
 hex = "0.4.3"
 otti-core = { path = "../otti-core" }
-rand = "0.8.4"
+rand = "0.8.5"
 scrypt = { version = "0.8.1", default-features = false, features = ["std"] }
-serde = { version = "1.0.133", features = ["derive"] }
-serde_json = "1.0.74"
+serde = { version = "1.0.136", features = ["derive"] }
+serde_json = "1.0.79"
 thiserror = "1.0.30"
 uuid = { version = "0.8.2", features = ["v4"] }
 
 [dev-dependencies]
-pretty_assertions = "1.0.0"
+pretty_assertions = "1.1.0"

@@ -13,7 +13,7 @@ use std::{
 
 use anyhow::Result;
 use arboard::Clipboard;
-use clap::{ArgEnum, IntoApp, Parser, Subcommand};
+use clap::{ArgEnum, CommandFactory, Parser, Subcommand};
 use clap_complete::Shell;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
@@ -226,7 +226,7 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
 fn completion(shell: Shell) -> Result<()> {
     clap_complete::generate(
         shell,
-        &mut Opt::into_app(),
+        &mut Opt::command(),
         env!("CARGO_BIN_NAME"),
         &mut io::stdout().lock(),
     );

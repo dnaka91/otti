@@ -6,19 +6,20 @@ edition = "2021"
 license = "AGPL-3.0-only"
 
 [dependencies]
-aes = "0.7.5"
+aes = "0.8.0"
 base64 = "0.13.0"
-block-modes = "0.8.1"
+block-padding = { version = "0.3.1", features = ["std"] }
 bytes = "1.1.0"
+cbc = "0.1.0"
 hmac = "0.12.0"
 otti-core = { path = "../otti-core" }
 pbkdf2 = { version = "0.10.0", default-features = false }
-rand = "0.8.4"
-serde = { version = "1.0.133", features = ["derive"] }
-serde_json = "1.0.74"
+rand = "0.8.5"
+serde = { version = "1.0.136", features = ["derive"] }
+serde_json = "1.0.79"
 serde_repr = "0.1.7"
 sha-1 = "0.10.0"
 thiserror = "1.0.30"
 
 [dev-dependencies]
-pretty_assertions = "1.0.0"
+pretty_assertions = "1.1.0"

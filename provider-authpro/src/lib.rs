@@ -1,10 +1,13 @@
 use std::convert::{TryFrom, TryInto};
 
 use aes::{
-    cipher::generic_array::{ArrayLength, GenericArray},
+    cipher::{
+        block_padding::Pkcs7,
+        generic_array::{ArrayLength, GenericArray},
+        BlockDecryptMut, BlockEncryptMut, KeyIvInit,
+    },
     Aes256,
 };
-use block_modes::{block_padding::Pkcs7, BlockMode, Cbc};
 use bytes::{Buf, BufMut};
 use hmac::Hmac;
 use otti_core::{ExposeSecret, Key};
@@ -20,7 +23,7 @@ pub enum Error {
     #[error("the import data is too short")]
     InputTooShort,
     #[error("data decryption failed")]
-    Aes(#[from] block_modes::BlockModeError),
+    Aes(#[from] block_padding::UnpadError),
     #[error("JSON (de-)serialization failed")]
     Json(#[from] serde_json::Error),
     #[error("the OTP type `{0:?}` is not supported yet")]
@@ -199,9 +202,11 @@ fn decrypt(data: &mut impl Buf, password: impl AsRef<[u8]>) -> Result<Vec<u8>, E
     let key = GenericArray::from_slice(&key);
     let aes_iv = GenericArray::from_slice(&aes_iv);
 
-    let cipher = <Cbc<Aes256, Pkcs7>>::new_fix(key, aes_iv);
+    let cipher = <cbc::Decryptor<Aes256>>::new(key, aes_iv);
 
-    cipher.decrypt_vec(data.chunk()).map_err(Into::into)
+    cipher
+        .decrypt_padded_vec_mut::<Pkcs7>(data.chunk())
+        .map_err(Into::into)
 }
 
 fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Result<(), Error> {
@@ -213,9 +218,9 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
     pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, PBKDF2_ROUNDS, &mut key);
 
     let key = GenericArray::from_slice(&key);
-    let cipher = <Cbc<Aes256, Pkcs7>>::new_fix(key, &aes_iv);
+    let cipher = <cbc::Encryptor<Aes256>>::new(key, &aes_iv);
 
-    let buf = cipher.encrypt_vec(data);
+    let buf = cipher.encrypt_padded_vec_mut::<Pkcs7>(data);
 
     wr.put(HEADER.as_bytes());
     wr.put(&pbkdf2_salt[..]);
