@@ -7,13 +7,13 @@ resolver = "2"
 license = "AGPL-3.0-only"
 
 [dependencies]
-anyhow = "1.0.53"
-arboard = { version = "2.0.1", default-features = false }
-clap = { version = "3.1.0", features = ["derive"] }
-clap_complete = "3.1.0"
+anyhow = "1.0.56"
+arboard = { version = "2.1.0", default-features = false }
+clap = { version = "3.1.6", features = ["derive"] }
+clap_complete = "3.1.1"
 crossbeam-channel = "0.5.2"
 crossterm = "0.22.1"
-indoc = "1.0.3"
+indoc = "1.0.4"
 otti-core = { path = "./otti-core" }
 otti-gen = { path = "./otti-gen" }
 otti-store = { path = "./otti-store" }
