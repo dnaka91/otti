@@ -19,4 +19,4 @@ thiserror = "1.0.30"
 uuid = { version = "0.8.2", features = ["v4"] }
 
 [dev-dependencies]
-pretty_assertions = "1.1.0"
+pretty_assertions = "1.2.0"

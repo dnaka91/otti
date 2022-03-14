@@ -157,7 +157,7 @@ fn import(password: Option<String>, provider: Provider, file: PathBuf) -> Result
 
     println!("Imported {} accounts", accounts.len());
 
-    let password = SecretString::new(rpassword::read_password_from_tty(Some("Store password:"))?);
+    let password = SecretString::new(rpassword::prompt_password("Store password:")?);
 
     otti_store::seal(&accounts, &password)?;
 
@@ -165,7 +165,7 @@ fn import(password: Option<String>, provider: Provider, file: PathBuf) -> Result
 }
 
 fn export(file_password: Option<String>, provider: Provider, file: Option<PathBuf>) -> Result<()> {
-    let password = SecretString::new(rpassword::read_password_from_tty(Some("Store password:"))?);
+    let password = SecretString::new(rpassword::prompt_password("Store password:")?);
     let accounts = otti_store::open(&password)?;
     let file = file.unwrap_or_else(|| PathBuf::from(provider.export_name(file_password.is_some())));
 
@@ -183,7 +183,7 @@ fn export(file_password: Option<String>, provider: Provider, file: Option<PathBu
 }
 
 fn show(issuer: &str, label: Option<&str>) -> Result<()> {
-    let password = SecretString::new(rpassword::read_password_from_tty(Some("Password:"))?);
+    let password = SecretString::new(rpassword::prompt_password("Password:")?);
 
     let accounts = otti_store::open(&password)?;
     let issuer = issuer.to_lowercase();
@@ -241,7 +241,7 @@ enum CurrentDialog {
 }
 
 fn run() -> Result<()> {
-    let password = SecretString::new(rpassword::read_password_from_tty(Some("Password:"))?);
+    let password = SecretString::new(rpassword::prompt_password("Password:")?);
 
     let accounts = otti_store::open(&password)?;
 
