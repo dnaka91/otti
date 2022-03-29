@@ -15,6 +15,7 @@ rand = "0.8.5"
 scrypt = { version = "0.10.0", default-features = false, features = ["std"] }
 serde = { version = "1.0.136", features = ["derive"] }
 serde_json = "1.0.79"
+serde_repr = "0.1.7"
 thiserror = "1.0.30"
 uuid = { version = "0.8.2", features = ["v4"] }
 

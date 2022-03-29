@@ -981,6 +981,7 @@ dependencies = [
  "scrypt",
  "serde",
  "serde_json",
+ "serde_repr",
  "thiserror",
  "uuid",
 ]

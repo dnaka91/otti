@@ -15,6 +15,7 @@ use otti_core::{ExposeSecret, Key};
 use rand::prelude::*;
 use scrypt::Params as ScryptParams;
 use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 use uuid::Uuid;
 
 mod de;
@@ -35,10 +36,16 @@ pub enum Error {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Export {
-    version: u8,
+    version: ExportVersion,
     header: Header,
     #[serde(with = "de::base64_string")]
     db: Vec<u8>,
+}
+
+#[derive(Clone, Copy, Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+enum ExportVersion {
+    V1 = 1,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -81,8 +88,15 @@ struct KeyParams {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Vault {
-    version: u8,
+    version: VaultVersion,
     entries: Vec<Entry>,
+}
+
+#[derive(Clone, Copy, Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+enum VaultVersion {
+    V1 = 1,
+    V2 = 2,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -317,7 +331,7 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
     let slot_tag = slot_cipher.encrypt_in_place_detached(&slot_nonce, &[], &mut data_key)?;
 
     let export = Export {
-        version: 1,
+        version: ExportVersion::V1,
         header: Header {
             slots: vec![Slot {
                 ty: SLOT_TYPE_PASSWORD,
@@ -399,7 +413,7 @@ pub fn save(
     password: Option<impl AsRef<[u8]>>,
 ) -> Result<(), Error> {
     let vault = Vault {
-        version: 2,
+        version: VaultVersion::V2,
         entries: data.iter().map(Into::into).collect::<Vec<Entry>>(),
     };
 
