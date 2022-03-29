@@ -1,6 +1,6 @@
 [package]
 name = "provider-authpro"
-version = "0.2.1"
+version = "0.2.3"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2021"
 license = "AGPL-3.0-only"
