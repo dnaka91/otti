@@ -90,7 +90,13 @@ struct Entry {
     uuid: String,
     name: String,
     issuer: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     group: Option<String>,
+    #[serde(with = "de::base64_string::option")]
+    icon: Option<Vec<u8>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    icon_mime: Option<String>,
+    note: String,
 }
 
 impl From<Entry> for otti_core::Account {
@@ -139,6 +145,9 @@ impl From<&otti_core::Account> for Entry {
             name: a.label.clone(),
             issuer: a.issuer.clone().unwrap_or_default(),
             group: a.meta.tags.first().cloned(),
+            icon: None,
+            icon_mime: None,
+            note: String::new(),
         }
     }
 }
@@ -363,7 +372,7 @@ pub fn save(
     password: Option<impl AsRef<[u8]>>,
 ) -> Result<(), Error> {
     let vault = Vault {
-        version: 1,
+        version: 2,
         entries: data.iter().map(Into::into).collect::<Vec<Entry>>(),
     };
 
@@ -439,13 +448,15 @@ mod tests {
                 "params": null
             },
             "db": {
-                "version": 1,
+                "version": 2,
                 "entries": [{
                     "type": "totp",
                     "uuid": "00000000-0000-0000-0000-000000000000",
                     "name": "Entry 1",
                     "issuer": "Provider 1",
                     "group": "Tag 1",
+                    "note": "",
+                    "icon": null,
                     "info": {
                         "secret": "AAAAAAAAAAAAAAAA",
                         "algo": "SHA1",
@@ -496,10 +507,10 @@ mod tests {
                 }],
                 "params": {
                     "nonce": "000000000000000000000000",
-                    "tag": "5fe7e9949565533181fc0babafb7f724"
+                    "tag": "9248dbcf4422f9d465aebac7b3a15e50"
                 }
             },
-            "db": "tYU2WD8TAgFpbP/iltH4dgYSaq9EhBAvqoCB9wVjF7T/Pt5cPWjNWSiGP0tlNk3VNCSok+TPXQpDPVyi6k17XpGFzjJg6Wx2IbeAwiD9AM+elWvjiI+XD8qeeA8zN2neicBB4Uz1v1Y239nn3x/MVJYolN5BU8LJQbeHPqMnUCJzT/KLVujZgQfM2BkcrOO2jCRyptJCWJjVPcUHmCf5W9VAhtjRbc9x0SzH+lFh/+bRC1EtF28SUpZ8pVuUJE0CE/lY8Wl4x3mHlXKVJJl9ktHQMBW++3uc"
+            "db": "tYU2WD8TAgFpbP/hltH4dgYSaq9EhBAvqoCB9wVjF7T/Pt5cPWjNWSiGP0tlNk3VNCSok+TPXQpDPVyi6k17XpGFzjJg6Wx2IbeAwiD9AM+elWvjiI+XD8qeeA8zN2neicBB4Uz1v1Y239nn3x/MVJYolN5BU8LJQbeHPqMnUCJzT/KLVujZgQfM2BkcrOO2jCRyptJCWJjVPcUHmCf5W9VAhtjRbc9x0SzH+lFh/+bRC1EtF28SUpZ8pVuUJE0CE/lY8Wl4x3mHlXKVJJl9ktHQMBW+qgSIygW7WhK5y0J4vII0E5omn9OpdJ5UoQ=="
         }};
 
         assert_eq!(expected, output);

@@ -38,6 +38,51 @@ pub mod base64_string {
             base64::decode(v).map_err(|e| de::Error::custom(e.to_string()))
         }
     }
+
+    pub mod option {
+        use super::*;
+
+        pub fn serialize<S>(value: &Option<Vec<u8>>, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: Serializer,
+        {
+            match value {
+                Some(v) => serializer.serialize_some(&base64::encode(v)),
+                None => serializer.serialize_none(),
+            }
+        }
+
+        pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
+        where
+            D: Deserializer<'de>,
+        {
+            deserializer.deserialize_option(OptionVisitor)
+        }
+
+        struct OptionVisitor;
+
+        impl<'de> Visitor<'de> for OptionVisitor {
+            type Value = Option<Vec<u8>>;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("optional bytes encoded as Base64 string")
+            }
+
+            fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
+            where
+                D: Deserializer<'de>,
+            {
+                super::deserialize(deserializer).map(Some)
+            }
+
+            fn visit_none<E>(self) -> Result<Self::Value, E>
+            where
+                E: de::Error,
+            {
+                Ok(None)
+            }
+        }
+    }
 }
 
 pub mod hex_string {

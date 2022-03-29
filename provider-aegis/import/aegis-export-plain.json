@@ -5,13 +5,14 @@
     "params": null
   },
   "db": {
-    "version": 1,
+    "version": 2,
     "entries": [
       {
         "type": "hotp",
         "uuid": "98fba859-bd1e-4a77-a3a1-d77845c46a9a",
         "name": "Sample HOTP",
         "issuer": "",
+        "note": "",
         "icon": null,
         "info": {
           "secret": "GEZDGNBVGY3TQOJQ",
@@ -26,6 +27,7 @@
         "name": "Sample TOTP",
         "issuer": "Sample Issuer",
         "group": "Sample Group",
+        "note": "",
         "icon": null,
         "info": {
           "secret": "GEZDGNBVGY3TQOJQ",
@@ -39,6 +41,7 @@
         "uuid": "cea85ca4-0a04-4c24-bcee-f1b244f1a7a7",
         "name": "Sample Steam",
         "issuer": "",
+        "note": "",
         "icon": null,
         "info": {
           "secret": "GEZDGNBVGY3TQOJQ",
