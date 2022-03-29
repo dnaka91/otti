@@ -11,7 +11,7 @@ anyhow = "1.0.56"
 arboard = { version = "2.1.0", default-features = false }
 clap = { version = "3.1.6", features = ["derive"] }
 clap_complete = "3.1.1"
-crossbeam-channel = "0.5.2"
+crossbeam-channel = "0.5.4"
 crossterm = "0.22.1"
 indoc = "1.0.4"
 otti-core = { path = "./otti-core" }
@@ -20,7 +20,7 @@ otti-store = { path = "./otti-store" }
 provider-aegis = { path = "./provider-aegis" }
 provider-andotp = { path = "./provider-andotp" }
 provider-authpro = { path = "./provider-authpro" }
-rpassword = "6.0.0"
+rpassword = "6.0.1"
 rprompt = "1.0.5"
 secrecy = "0.8.0"
 tui = { version = "0.17.0", default-features = false, features = ["crossterm"] }
