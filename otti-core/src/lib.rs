@@ -7,7 +7,7 @@
 #![deny(rust_2018_idioms, clippy::all, clippy::pedantic)]
 #![allow(clippy::inline_always, clippy::missing_errors_doc)]
 
-use std::str::FromStr;
+use std::{collections::BTreeMap, str::FromStr};
 
 pub use key::Key;
 pub use secrecy::ExposeSecret;
@@ -39,6 +39,12 @@ pub struct Account {
     pub issuer: Option<String>,
     /// Additional metadata for Otti.
     pub meta: Metadata,
+    /// Additional free-form values, mostly used to carry unsupported import data.
+    ///
+    /// This allows to keep extra data that would otherwise be lost during import. When exporting
+    /// again, all information can be restored.
+    #[serde(default)]
+    pub extras: BTreeMap<String, Vec<u8>>,
 }
 
 #[cfg(feature = "otpurl")]

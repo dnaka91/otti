@@ -1,4 +1,4 @@
-use std::{convert::TryFrom, str::FromStr};
+use std::{collections::BTreeMap, convert::TryFrom, str::FromStr};
 
 use serde::Deserialize;
 
@@ -146,6 +146,7 @@ pub fn parse(value: &str) -> Result<Account, ParseError> {
         algorithm: params.algorithm.0,
         issuer: params.issuer.or_else(|| issuer.map(ToOwned::to_owned)),
         meta: Metadata::default(),
+        extras: BTreeMap::default(),
     })
 }
 
@@ -165,6 +166,7 @@ mod tests {
             algorithm: Algorithm::Sha256,
             issuer: Some("Test This".to_owned()),
             meta: Metadata::default(),
+            extras: BTreeMap::default(),
         };
 
         assert_eq!(expect, account);

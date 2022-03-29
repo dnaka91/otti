@@ -6,6 +6,8 @@
 #![deny(rust_2018_idioms, clippy::all, clippy::pedantic)]
 #![allow(clippy::missing_errors_doc, clippy::single_match_else)]
 
+use std::collections::BTreeMap;
+
 use aes_gcm::{
     aead::generic_array::{ArrayLength, GenericArray},
     AeadInPlace, Aes256Gcm, NewAead,
@@ -65,6 +67,7 @@ impl From<Account> for otti_core::Account {
             algorithm: a.algorithm.into(),
             issuer: Some(a.issuer),
             meta: otti_core::Metadata { tags: a.tags },
+            extras: BTreeMap::new(),
         }
     }
 }
@@ -245,6 +248,8 @@ pub fn save(
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
     use pretty_assertions::assert_eq;
     use serde_json::json;
 
@@ -285,6 +290,7 @@ mod tests {
             meta: otti_core::Metadata {
                 tags: vec!["Tag 1".to_owned()],
             },
+            extras: BTreeMap::new(),
         }];
 
         save(&mut export, &data, None::<&str>).unwrap();
@@ -317,6 +323,7 @@ mod tests {
             meta: otti_core::Metadata {
                 tags: vec!["Tag 1".to_owned()],
             },
+            extras: BTreeMap::new(),
         }];
 
         save(&mut export, &data, Some("123")).unwrap();

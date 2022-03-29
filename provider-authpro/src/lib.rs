@@ -1,4 +1,7 @@
-use std::convert::{TryFrom, TryInto};
+use std::{
+    collections::BTreeMap,
+    convert::{TryFrom, TryInto},
+};
 
 use aes::{
     cipher::{
@@ -56,6 +59,8 @@ struct Authenticator {
     ranking: u64,
 }
 
+const EXTRA_RANKING: &str = "authpro/ranking";
+
 struct AuthenticatorWithCategories<'a>(Authenticator, Vec<&'a Category>);
 
 impl<'a> TryFrom<AuthenticatorWithCategories<'a>> for otti_core::Account {
@@ -63,6 +68,11 @@ impl<'a> TryFrom<AuthenticatorWithCategories<'a>> for otti_core::Account {
 
     fn try_from(ac: AuthenticatorWithCategories<'a>) -> Result<Self, Self::Error> {
         let (a, c) = (ac.0, ac.1);
+
+        let mut extras = BTreeMap::new();
+        if a.ranking > 0 {
+            extras.insert(EXTRA_RANKING.to_owned(), a.ranking.to_be_bytes().to_vec());
+        }
 
         Ok(Self {
             label: a.username,
@@ -79,6 +89,7 @@ impl<'a> TryFrom<AuthenticatorWithCategories<'a>> for otti_core::Account {
             meta: otti_core::Metadata {
                 tags: c.iter().map(|c| c.name.clone()).collect(),
             },
+            extras,
         })
     }
 }
@@ -106,7 +117,11 @@ impl From<&otti_core::Account> for Authenticator {
                 otti_core::Otp::Hotp { counter } => counter,
                 otti_core::Otp::Totp { .. } | otti_core::Otp::Steam { .. } => 0,
             },
-            ranking: 0,
+            ranking: a
+                .extras
+                .get(EXTRA_RANKING)
+                .and_then(|v| v.as_slice().try_into().ok().map(u64::from_be_bytes))
+                .unwrap_or_default(),
         }
     }
 }
@@ -301,6 +316,7 @@ pub fn save(
 
 #[cfg(test)]
 mod tests {
+    use maplit::btreemap;
     use pretty_assertions::assert_eq;
     use serde_json::json;
 
@@ -341,6 +357,9 @@ mod tests {
             meta: otti_core::Metadata {
                 tags: vec!["Tag 1".to_owned()],
             },
+            extras: btreemap! {
+                "authpro/ranking".to_owned() => vec![0, 0, 0, 0, 0, 0, 0, 5],
+            },
         }];
 
         save(&mut export, &data, None::<&str>).unwrap();
@@ -357,7 +376,7 @@ mod tests {
                 "Digits": 6,
                 "Period": 30,
                 "Counter": 0,
-                "Ranking": 0
+                "Ranking": 5
             }],
             "Categories": [],
             "AuthenticatorCategories": [],
@@ -380,6 +399,9 @@ mod tests {
             meta: otti_core::Metadata {
                 tags: vec!["Tag 1".to_owned()],
             },
+            extras: btreemap! {
+                "authpro/ranking".to_owned() => vec![0, 0, 0, 0, 0, 0, 0, 5],
+            },
         }];
 
         save(&mut export, &data, Some("123")).unwrap();
@@ -395,11 +417,11 @@ mod tests {
             162, 210, 77, 84, 93, 224, 151, 163, 240, 181, 31, 82, 247, 20, 118, 28, 165, 247, 100,
             168, 180, 111, 123, 111, 151, 72, 175, 109, 165, 5, 151, 6, 44, 126, 207, 36, 251, 227,
             95, 158, 29, 237, 99, 65, 21, 237, 162, 97, 185, 110, 154, 40, 214, 61, 104, 206, 48,
-            181, 130, 240, 222, 195, 16, 85, 46, 61, 83, 102, 14, 41, 45, 83, 194, 216, 98, 114,
-            113, 107, 213, 224, 67, 23, 2, 174, 134, 211, 206, 255, 149, 58, 148, 131, 163, 150,
-            203, 43, 81, 218, 86, 29, 11, 48, 125, 119, 253, 19, 16, 255, 165, 204, 151, 128, 71,
-            193, 47, 209, 172, 245, 53, 72, 204, 196, 128, 123, 245, 120, 57, 76, 57, 70, 23, 202,
-            216, 108, 182, 246, 35, 177, 164, 211, 26, 200, 136, 226, 90, 55, 199, 173, 233,
+            181, 130, 240, 222, 195, 16, 85, 46, 61, 83, 102, 14, 161, 206, 206, 228, 18, 251, 230,
+            133, 115, 21, 39, 90, 113, 100, 156, 238, 47, 17, 97, 131, 32, 88, 10, 128, 195, 122,
+            224, 1, 210, 110, 168, 68, 140, 220, 194, 86, 29, 121, 132, 249, 71, 135, 177, 122,
+            222, 49, 0, 226, 81, 165, 32, 247, 66, 9, 54, 61, 124, 95, 215, 23, 110, 32, 16, 122,
+            153, 31, 102, 31, 65, 90, 162, 135, 241, 9, 231, 149, 187, 140, 10, 35,
         ];
 
         assert_eq!(expected, export.as_slice());

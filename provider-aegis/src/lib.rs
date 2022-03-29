@@ -3,6 +3,8 @@
 //! Import/Export component that allows to transform between the Otti accounts and backups from/to
 //! the [`Aegis Authenticator`](https://github.com/beemdevelopment/Aegis).
 
+use std::collections::BTreeMap;
+
 use aes_gcm::{
     aead::generic_array::{ArrayLength, GenericArray},
     AeadInPlace, Aes256Gcm, NewAead,
@@ -99,6 +101,10 @@ struct Entry {
     note: String,
 }
 
+const EXTRA_ICON: &str = "aegis/icon";
+const EXTRA_ICON_MIME: &str = "aegis/icon_mime";
+const EXTRA_NOTE: &str = "aegis/note";
+
 impl From<Entry> for otti_core::Account {
     fn from(e: Entry) -> Self {
         let (info, otp) = match e.ty {
@@ -106,6 +112,17 @@ impl From<Entry> for otti_core::Account {
             EntryType::Totp { info, period } => (info, otti_core::Otp::Totp { window: period }),
             EntryType::Steam { info, period } => (info, otti_core::Otp::Steam { period }),
         };
+
+        let mut extras = BTreeMap::new();
+        if let Some(icon) = e.icon {
+            extras.insert(EXTRA_ICON.to_owned(), icon);
+        }
+        if let Some(icon_mime) = e.icon_mime {
+            extras.insert(EXTRA_ICON_MIME.to_owned(), icon_mime.into_bytes());
+        }
+        if !e.note.is_empty() {
+            extras.insert(EXTRA_NOTE.to_owned(), e.note.into_bytes());
+        }
 
         Self {
             label: e.name,
@@ -120,6 +137,7 @@ impl From<Entry> for otti_core::Account {
                     None => vec![],
                 },
             },
+            extras,
         }
     }
 }
@@ -145,9 +163,18 @@ impl From<&otti_core::Account> for Entry {
             name: a.label.clone(),
             issuer: a.issuer.clone().unwrap_or_default(),
             group: a.meta.tags.first().cloned(),
-            icon: None,
-            icon_mime: None,
-            note: String::new(),
+            icon: a.extras.get(EXTRA_ICON).cloned(),
+            icon_mime: a
+                .extras
+                .get(EXTRA_ICON_MIME)
+                .cloned()
+                .and_then(|v| String::from_utf8(v).ok()),
+            note: a
+                .extras
+                .get(EXTRA_NOTE)
+                .cloned()
+                .and_then(|v| String::from_utf8(v).ok())
+                .unwrap_or_default(),
         }
     }
 }
@@ -396,6 +423,7 @@ pub fn save(
 
 #[cfg(test)]
 mod tests {
+    use maplit::btreemap;
     use pretty_assertions::assert_eq;
     use serde_json::json;
 
@@ -436,6 +464,11 @@ mod tests {
             meta: otti_core::Metadata {
                 tags: vec!["Tag 1".to_owned()],
             },
+            extras: btreemap! {
+                "aegis/icon".to_owned() => vec![1, 2, 3, 4],
+                "aegis/icon_mime".to_owned() => b"image/png".to_vec(),
+                "aegis/note".to_owned() => b"test".to_vec(),
+            },
         }];
 
         save(&mut export, &data, None::<&str>).unwrap();
@@ -455,8 +488,9 @@ mod tests {
                     "name": "Entry 1",
                     "issuer": "Provider 1",
                     "group": "Tag 1",
-                    "note": "",
-                    "icon": null,
+                    "note": "test",
+                    "icon": "AQIDBA==",
+                    "icon_mime": "image/png",
                     "info": {
                         "secret": "AAAAAAAAAAAAAAAA",
                         "algo": "SHA1",
@@ -483,6 +517,11 @@ mod tests {
             meta: otti_core::Metadata {
                 tags: vec!["Tag 1".to_owned()],
             },
+            extras: btreemap! {
+                "aegis/icon".to_owned() => vec![1, 2, 3, 4],
+                "aegis/icon_mime".to_owned() => b"image/png".to_vec(),
+                "aegis/note".to_owned() => b"test".to_vec(),
+            },
         }];
 
         save(&mut export, &data, Some("123")).unwrap();
@@ -507,10 +546,10 @@ mod tests {
                 }],
                 "params": {
                     "nonce": "000000000000000000000000",
-                    "tag": "9248dbcf4422f9d465aebac7b3a15e50"
+                    "tag": "9ea0591d234316df9f29325afa94fedf"
                 }
             },
-            "db": "tYU2WD8TAgFpbP/hltH4dgYSaq9EhBAvqoCB9wVjF7T/Pt5cPWjNWSiGP0tlNk3VNCSok+TPXQpDPVyi6k17XpGFzjJg6Wx2IbeAwiD9AM+elWvjiI+XD8qeeA8zN2neicBB4Uz1v1Y239nn3x/MVJYolN5BU8LJQbeHPqMnUCJzT/KLVujZgQfM2BkcrOO2jCRyptJCWJjVPcUHmCf5W9VAhtjRbc9x0SzH+lFh/+bRC1EtF28SUpZ8pVuUJE0CE/lY8Wl4x3mHlXKVJJl9ktHQMBW+qgSIygW7WhK5y0J4vII0E5omn9OpdJ5UoQ=="
+            "db": "tYU2WD8TAgFpbP/hltH4dgYSaq9EhBAvqoCB9wVjF7T/Pt5cPWjNWSiGP0tlNk3VNCSok+TPXQpDPVyi6k17XpGFzjJg6Wx2IbeAwiD9AM+elWvjiI+XD8qeeA8zN2neicBB4Uz1v1Y239nn3x/MVJYolN5BU8LJQbeHPqMnUCJzT/KLVujZgQfM2BkcrOO2jCRyptJCWJjVPcUHmCf5W9VAhtjRbc9x0SzH+lFh/+bRC1EtF28SUpZ8pVuUJE0CE/lY8Wl4x3mHlXKVJJl9ktHQMBW+qgSIygW7WhL1/39d1OIbQdNhkcviNYxng2xPI7P9VKCo0qZNPIIjx6fGGF8CPQw1W3qFqpPJ58rL8mM="
         }};
 
         assert_eq!(expected, output);
