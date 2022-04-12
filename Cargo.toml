@@ -1,6 +1,6 @@
 [package]
 name = "otti"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2021"
 resolver = "2"
