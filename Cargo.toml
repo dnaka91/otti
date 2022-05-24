@@ -27,6 +27,7 @@ tui = { version = "0.18.0", default-features = false, features = ["crossterm"] }
 
 [profile.release]
 lto = true
+strip = true
 
 [workspace]
 members = [
