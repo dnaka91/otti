@@ -14,7 +14,7 @@ use std::{
     path::PathBuf,
 };
 
-use directories_next::ProjectDirs;
+use directories::ProjectDirs;
 use flate2::{
     write::{ZlibDecoder, ZlibEncoder},
     Compression,
@@ -114,7 +114,7 @@ pub fn open(password: &SecretString) -> Result<Vec<Account>, Error> {
     let data = decrypt(&encrypted, password)?;
     let data = decompress(&data)?;
 
-    rmp_serde::from_read_ref(&data).map_err(Into::into)
+    rmp_serde::from_slice(&data).map_err(Into::into)
 }
 
 /// Seal the given list of accounts with the provided password.

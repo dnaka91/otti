@@ -362,12 +362,12 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
 
 #[cfg(not(test))]
 fn random_uuid() -> String {
-    Uuid::new_v4().to_hyphenated().to_string()
+    Uuid::new_v4().hyphenated().to_string()
 }
 
 #[cfg(test)]
 fn random_uuid() -> String {
-    Uuid::default().to_hyphenated().to_string()
+    Uuid::default().hyphenated().to_string()
 }
 
 #[cfg(not(test))]

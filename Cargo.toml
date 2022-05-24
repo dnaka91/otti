@@ -7,13 +7,13 @@ resolver = "2"
 license = "AGPL-3.0-only"
 
 [dependencies]
-anyhow = "1.0.56"
-arboard = { version = "2.1.0", default-features = false }
-clap = { version = "3.1.6", features = ["derive"] }
-clap_complete = "3.1.1"
+anyhow = "1.0.57"
+arboard = { version = "2.1.1", default-features = false }
+clap = { version = "3.1.18", features = ["derive"] }
+clap_complete = "3.1.4"
 crossbeam-channel = "0.5.4"
-crossterm = "0.22.1"
-indoc = "1.0.4"
+crossterm = "0.23.2"
+indoc = "1.0.6"
 otti-core = { path = "./otti-core" }
 otti-gen = { path = "./otti-gen" }
 otti-store = { path = "./otti-store" }
@@ -23,7 +23,7 @@ provider-authpro = { path = "./provider-authpro" }
 rpassword = "6.0.1"
 rprompt = "1.0.5"
 secrecy = "0.8.0"
-tui = { version = "0.17.0", default-features = false, features = ["crossterm"] }
+tui = { version = "0.18.0", default-features = false, features = ["crossterm"] }
 
 [profile.release]
 lto = true
