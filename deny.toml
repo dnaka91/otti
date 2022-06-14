@@ -14,5 +14,4 @@ exceptions = [
 skip = [
     { name = "aes", version = "=0.7.5" },
     { name = "cipher", version = "=0.3.0" },
-    { name = "wasi", version = "=0.10.2" },
 ]

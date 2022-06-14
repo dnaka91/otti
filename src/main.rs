@@ -13,7 +13,7 @@ use std::{
 
 use anyhow::Result;
 use arboard::Clipboard;
-use clap::{ArgEnum, CommandFactory, Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::Shell;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
@@ -42,41 +42,45 @@ enum Command {
     /// Import OTP accounts from another application.
     Import {
         /// Optional password if the file is protected.
-        #[clap(short, long)]
+        #[clap(short, long, value_parser)]
         password: Option<String>,
         /// Provider/application that this file came from.
-        #[clap(arg_enum)]
+        #[clap(value_parser, value_enum)]
         provider: Provider,
         /// The file to import.
+        #[clap(value_parser)]
         file: PathBuf,
     },
     /// Export OTP accounts to another application.
     Export {
         /// Optional password to protect the file.
-        #[clap(short, long)]
+        #[clap(short, long, value_parser)]
         password: Option<String>,
         /// Provider/application that this file will be imported into.
-        #[clap(arg_enum)]
+        #[clap(value_parser, value_enum)]
         provider: Provider,
         /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
         /// folder, where the extension depends on the provider's format.
+        #[clap(value_parser)]
         file: Option<PathBuf>,
     },
     /// Search for a single account and print the current OTP.
     Show {
+        #[clap(value_parser)]
         issuer: String,
+        #[clap(value_parser)]
         label: Option<String>,
     },
     /// Generate auto-completion scripts for various shells.
     Completion {
         /// Shell to generate an auto-completion script for.
-        #[clap(arg_enum)]
+        #[clap(value_parser, value_enum)]
         shell: Shell,
     },
 }
 
 /// Possible supported providers for data import/export.
-#[derive(Clone, Copy, ArgEnum)]
+#[derive(Clone, Copy, ValueEnum)]
 enum Provider {
     /// Aegis authenticator.
     Aegis,
