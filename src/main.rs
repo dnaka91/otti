@@ -42,39 +42,35 @@ enum Command {
     /// Import OTP accounts from another application.
     Import {
         /// Optional password if the file is protected.
-        #[clap(short, long, value_parser)]
+        #[clap(short, long)]
         password: Option<String>,
         /// Provider/application that this file came from.
-        #[clap(value_parser, value_enum)]
+        #[clap(value_enum)]
         provider: Provider,
         /// The file to import.
-        #[clap(value_parser)]
         file: PathBuf,
     },
     /// Export OTP accounts to another application.
     Export {
         /// Optional password to protect the file.
-        #[clap(short, long, value_parser)]
+        #[clap(short, long)]
         password: Option<String>,
         /// Provider/application that this file will be imported into.
-        #[clap(value_parser, value_enum)]
+        #[clap(value_enum)]
         provider: Provider,
         /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
         /// folder, where the extension depends on the provider's format.
-        #[clap(value_parser)]
         file: Option<PathBuf>,
     },
     /// Search for a single account and print the current OTP.
     Show {
-        #[clap(value_parser)]
         issuer: String,
-        #[clap(value_parser)]
         label: Option<String>,
     },
     /// Generate auto-completion scripts for various shells.
     Completion {
         /// Shell to generate an auto-completion script for.
-        #[clap(value_parser, value_enum)]
+        #[clap(value_enum)]
         shell: Shell,
     },
 }
