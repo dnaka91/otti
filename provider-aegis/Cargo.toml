@@ -1,9 +1,10 @@
 [package]
 name = "provider-aegis"
-version = "0.2.3"
-authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
-edition = "2021"
-license = "AGPL-3.0-only"
+publish = false
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
 
 [dependencies]
 aes-gcm = { version = "0.10.1", features = ["std"] }

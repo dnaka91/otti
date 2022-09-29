@@ -1,12 +1,8 @@
 [licenses]
 allow-osi-fsf-free = "both"
 exceptions = [
-    { allow = ["AGPL-3.0"], name = "otti" },
-    { allow = ["AGPL-3.0"], name = "otti-core" },
-    { allow = ["AGPL-3.0"], name = "otti-gen" },
-    { allow = ["AGPL-3.0"], name = "otti-store" },
-    { allow = ["AGPL-3.0"], name = "provider-aegis" },
-    { allow = ["AGPL-3.0"], name = "provider-andotp" },
-    { allow = ["AGPL-3.0"], name = "provider-authpro" },
     { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
 ]
+
+[licenses.private]
+ignore = true

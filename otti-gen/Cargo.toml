@@ -1,9 +1,10 @@
 [package]
 name = "otti-gen"
-version = "0.2.1"
-authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
-edition = "2021"
-license = "AGPL-3.0-only"
+publish = false
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
 
 [dependencies]
 hmac = { version = "0.12.1", features = ["std"] }

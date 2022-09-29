@@ -1,10 +1,28 @@
-[package]
-name = "otti"
+[workspace]
+members = [
+    "otti-core",
+    "otti-gen",
+    "otti-store",
+    "provider-aegis",
+    "provider-andotp",
+    "provider-authpro",
+]
+resolver = "2"
+
+[workspace.package]
 version = "0.2.4"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2021"
 resolver = "2"
 license = "AGPL-3.0-only"
+
+[package]
+name = "otti"
+publish = false
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
 
 [dependencies]
 anyhow = "1.0.65"
@@ -29,13 +47,3 @@ tui = { version = "0.19.0", default-features = false, features = ["crossterm"] }
 [profile.release]
 lto = true
 strip = true
-
-[workspace]
-members = [
-    "otti-core",
-    "otti-gen",
-    "otti-store",
-    "provider-aegis",
-    "provider-andotp",
-    "provider-authpro",
-]
