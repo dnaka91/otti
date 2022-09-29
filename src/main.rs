@@ -6,16 +6,13 @@
 )]
 
 use std::{
-    fs::{self, OpenOptions},
-    io::{self, Write},
-    path::{Path, PathBuf},
+    fs,
+    path::PathBuf,
     time::{Duration, UNIX_EPOCH},
 };
 
-use anyhow::{ensure, Context, Result};
+use anyhow::Result;
 use arboard::Clipboard;
-use clap::{CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
-use clap_complete::Shell;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
 use secrecy::SecretString;
@@ -26,104 +23,14 @@ use tui::{
 };
 use widgets::CodeDialog;
 
-use crate::widgets::{HelpDialog, List, ListState, ScrollBar};
+use crate::{
+    cli::{Command, Opt, Provider},
+    widgets::{HelpDialog, List, ListState, ScrollBar},
+};
 
+mod cli;
 mod terminal;
 mod widgets;
-
-#[derive(Parser)]
-#[command(about, author, version, propagate_version = true)]
-struct Opt {
-    #[structopt(subcommand)]
-    cmd: Option<Command>,
-}
-
-#[derive(Subcommand)]
-enum Command {
-    /// Import OTP accounts from another application.
-    Import {
-        /// Optional password if the file is protected.
-        #[arg(short, long)]
-        password: Option<String>,
-        /// Provider/application that this file came from.
-        #[arg(value_enum)]
-        provider: Provider,
-        /// The file to import.
-        #[arg(value_hint = ValueHint::FilePath)]
-        file: PathBuf,
-    },
-    /// Export OTP accounts to another application.
-    Export {
-        /// Optional password to protect the file.
-        #[arg(short, long)]
-        password: Option<String>,
-        /// Provider/application that this file will be imported into.
-        #[arg(value_enum)]
-        provider: Provider,
-        /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
-        /// folder, where the extension depends on the provider's format.
-        #[arg(value_hint = ValueHint::FilePath)]
-        file: Option<PathBuf>,
-    },
-    /// Search for a single account and print the current OTP.
-    Show {
-        issuer: String,
-        label: Option<String>,
-    },
-    /// Generate auto-completion scripts for various shells.
-    Completions {
-        /// Shell to generate an auto-completion script for.
-        #[arg(value_enum)]
-        shell: Shell,
-    },
-    /// Generate man pages into the given directory.
-    Manpages {
-        /// Target directory, that must already exist and be empty. If the any file with the same
-        /// name as any of the man pages already exist, it'll not be overwritten, but instead an
-        /// error be returned.
-        #[arg(value_hint = ValueHint::DirPath)]
-        dir: PathBuf,
-    },
-}
-
-/// Possible supported providers for data import/export.
-#[derive(Clone, Copy, ValueEnum)]
-enum Provider {
-    /// Aegis authenticator.
-    Aegis,
-    /// Android OTP Authenticator.
-    AndOtp,
-    /// Authenticator Pro.
-    AuthPro,
-}
-
-impl Provider {
-    fn export_name(self, with_password: bool) -> &'static str {
-        match self {
-            Self::Aegis => {
-                if with_password {
-                    "aegis-export.json"
-                } else {
-                    "aegis-export-plain.json"
-                }
-            }
-            Self::AndOtp => {
-                if with_password {
-                    "and-otp-export.json.aes"
-                } else {
-                    "and-otp-export.json"
-                }
-            }
-            Self::AuthPro => {
-                if with_password {
-                    "auth-pro-export.authpro"
-                } else {
-                    "auth-pro-export.json"
-                }
-            }
-        }
-    }
-}
 
 fn main() -> Result<()> {
     let opt = Opt::parse();
@@ -140,8 +47,8 @@ fn main() -> Result<()> {
             file,
         } => export(password, provider, file),
         Command::Show { issuer, label } => show(&issuer, label.as_deref()),
-        Command::Completions { shell } => completions(shell),
-        Command::Manpages { dir } => manpages(&dir),
+        Command::Completions { shell } => cli::completions(shell),
+        Command::Manpages { dir } => cli::manpages(&dir),
     })
 }
 
@@ -232,45 +139,6 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
     }
 
     Ok(())
-}
-
-#[allow(clippy::unnecessary_wraps)]
-fn completions(shell: Shell) -> Result<()> {
-    clap_complete::generate(
-        shell,
-        &mut Opt::command(),
-        env!("CARGO_PKG_NAME"),
-        &mut io::stdout().lock(),
-    );
-    Ok(())
-}
-
-fn manpages(dir: &Path) -> Result<()> {
-    fn print(dir: &Path, app: &clap::Command) -> Result<()> {
-        let name = app.get_display_name().unwrap_or_else(|| app.get_name());
-        let out = dir.join(format!("{name}.1"));
-        let mut out = OpenOptions::new()
-            .write(true)
-            .create_new(true)
-            .open(&out)
-            .with_context(|| format!("the file `{}` already exists", out.display()))?;
-
-        clap_mangen::Man::new(app.clone()).render(&mut out)?;
-        out.flush()?;
-
-        for sub in app.get_subcommands() {
-            print(dir, sub)?;
-        }
-
-        Ok(())
-    }
-
-    ensure!(dir.try_exists()?, "target directory doesn't exist");
-
-    let mut app = Opt::command();
-    app.build();
-
-    print(dir, &app)
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
