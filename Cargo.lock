@@ -216,6 +216,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "clap_mangen"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0941c55fc1417dea79ce9b0745c461002a14b3b905ce2993009b7bada5f99411"
+dependencies = [
+ "clap",
+ "roff",
+]
+
+[[package]]
 name = "clipboard-win"
 version = "4.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -664,6 +674,7 @@ dependencies = [
  "arboard",
  "clap",
  "clap_complete",
+ "clap_mangen",
  "crossbeam-channel",
  "crossterm",
  "indoc",
@@ -983,6 +994,12 @@ dependencies = [
  "rmp",
  "serde",
 ]
+
+[[package]]
+name = "roff"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b833d8d034ea094b1ea68aa6d5c740e0d04bad9d16568d08ba6f76823a114316"
 
 [[package]]
 name = "rpassword"

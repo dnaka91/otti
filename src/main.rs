@@ -6,12 +6,13 @@
 )]
 
 use std::{
-    fs, io,
-    path::PathBuf,
+    fs::{self, OpenOptions},
+    io::{self, Write},
+    path::{Path, PathBuf},
     time::{Duration, UNIX_EPOCH},
 };
 
-use anyhow::Result;
+use anyhow::{ensure, Context, Result};
 use arboard::Clipboard;
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
 use clap_complete::Shell;
@@ -75,6 +76,14 @@ enum Command {
         #[arg(value_enum)]
         shell: Shell,
     },
+    /// Generate man pages into the given directory.
+    Manpages {
+        /// Target directory, that must already exist and be empty. If the any file with the same
+        /// name as any of the man pages already exist, it'll not be overwritten, but instead an
+        /// error be returned.
+        #[arg(value_hint = ValueHint::DirPath)]
+        dir: PathBuf,
+    },
 }
 
 /// Possible supported providers for data import/export.
@@ -132,6 +141,7 @@ fn main() -> Result<()> {
         } => export(password, provider, file),
         Command::Show { issuer, label } => show(&issuer, label.as_deref()),
         Command::Completions { shell } => completions(shell),
+        Command::Manpages { dir } => manpages(&dir),
     })
 }
 
@@ -233,6 +243,34 @@ fn completions(shell: Shell) -> Result<()> {
         &mut io::stdout().lock(),
     );
     Ok(())
+}
+
+fn manpages(dir: &Path) -> Result<()> {
+    fn print(dir: &Path, app: &clap::Command) -> Result<()> {
+        let name = app.get_display_name().unwrap_or_else(|| app.get_name());
+        let out = dir.join(format!("{name}.1"));
+        let mut out = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&out)
+            .with_context(|| format!("the file `{}` already exists", out.display()))?;
+
+        clap_mangen::Man::new(app.clone()).render(&mut out)?;
+        out.flush()?;
+
+        for sub in app.get_subcommands() {
+            print(dir, sub)?;
+        }
+
+        Ok(())
+    }
+
+    ensure!(dir.try_exists()?, "target directory doesn't exist");
+
+    let mut app = Opt::command();
+    app.build();
+
+    print(dir, &app)
 }
 
 #[derive(Copy, Clone, PartialEq, Eq)]
