@@ -23,7 +23,7 @@ mod url;
 
 /// Otti account that contains the information to create OTPs for a single service.
 #[derive(Serialize, Deserialize)]
-#[cfg_attr(test, derive(Debug, PartialEq))]
+#[cfg_attr(test, derive(Debug, Eq, PartialEq))]
 pub struct Account {
     /// Free form label to describe this account.
     pub label: String,
@@ -59,7 +59,7 @@ impl FromStr for Account {
 /// Base information about the OTP used. The most common are HOTP and TOTP but there are many
 /// platform specific variations in the wild, like for Steam.
 #[derive(Clone, Debug, Serialize, Deserialize)]
-#[cfg_attr(test, derive(PartialEq, PartialOrd))]
+#[cfg_attr(test, derive(Eq, PartialEq, PartialOrd))]
 pub enum Otp {
     /// Counter based, using a counter as base of the OTP generation.
     ///
@@ -91,7 +91,7 @@ pub enum Otp {
 
 /// Algorithm used in the OTP generation to create the final code.
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-#[cfg_attr(test, derive(PartialEq, PartialOrd))]
+#[cfg_attr(test, derive(Eq, PartialEq, PartialOrd))]
 pub enum Algorithm {
     /// SHA-1 algorithm, most common.
     Sha1,
@@ -103,7 +103,7 @@ pub enum Algorithm {
 
 /// Additional metadata that is specific to **Otti** and mostly user provided.
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
-#[cfg_attr(test, derive(PartialEq, PartialOrd))]
+#[cfg_attr(test, derive(Eq, PartialEq, PartialOrd))]
 pub struct Metadata {
     /// Free list of tags to classify or group accounts.
     pub tags: Vec<String>,

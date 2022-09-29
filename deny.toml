@@ -1,17 +1,12 @@
 [licenses]
 allow-osi-fsf-free = "both"
 exceptions = [
-    { allow = ["AGPL-3.0"], name = "otti", version = "*" },
-    { allow = ["AGPL-3.0"], name = "otti-core", version = "*" },
-    { allow = ["AGPL-3.0"], name = "otti-gen", version = "*" },
-    { allow = ["AGPL-3.0"], name = "otti-store", version = "*" },
-    { allow = ["AGPL-3.0"], name = "provider-aegis", version = "*" },
-    { allow = ["AGPL-3.0"], name = "provider-andotp", version = "*" },
-    { allow = ["AGPL-3.0"], name = "provider-authpro", version = "*" },
-]
-
-[bans]
-skip = [
-    { name = "aes", version = "=0.7.5" },
-    { name = "cipher", version = "=0.3.0" },
+    { allow = ["AGPL-3.0"], name = "otti" },
+    { allow = ["AGPL-3.0"], name = "otti-core" },
+    { allow = ["AGPL-3.0"], name = "otti-gen" },
+    { allow = ["AGPL-3.0"], name = "otti-store" },
+    { allow = ["AGPL-3.0"], name = "provider-aegis" },
+    { allow = ["AGPL-3.0"], name = "provider-andotp" },
+    { allow = ["AGPL-3.0"], name = "provider-authpro" },
+    { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
 ]

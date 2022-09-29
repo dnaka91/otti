@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 
 use aes_gcm::{
     aead::generic_array::{ArrayLength, GenericArray},
-    AeadInPlace, Aes256Gcm, NewAead,
+    AeadInPlace, Aes256Gcm, KeyInit,
 };
 pub use bytes::{Buf, BufMut};
 use otti_core::{ExposeSecret, Key};

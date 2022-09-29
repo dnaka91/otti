@@ -13,7 +13,7 @@ use std::{
 
 use anyhow::Result;
 use arboard::Clipboard;
-use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
 use clap_complete::Shell;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
@@ -31,7 +31,7 @@ mod terminal;
 mod widgets;
 
 #[derive(Parser)]
-#[clap(about, author, version)]
+#[command(about, author, version, propagate_version = true)]
 struct Opt {
     #[structopt(subcommand)]
     cmd: Option<Command>,
@@ -42,24 +42,26 @@ enum Command {
     /// Import OTP accounts from another application.
     Import {
         /// Optional password if the file is protected.
-        #[clap(short, long)]
+        #[arg(short, long)]
         password: Option<String>,
         /// Provider/application that this file came from.
-        #[clap(value_enum)]
+        #[arg(value_enum)]
         provider: Provider,
         /// The file to import.
+        #[arg(value_hint = ValueHint::FilePath)]
         file: PathBuf,
     },
     /// Export OTP accounts to another application.
     Export {
         /// Optional password to protect the file.
-        #[clap(short, long)]
+        #[arg(short, long)]
         password: Option<String>,
         /// Provider/application that this file will be imported into.
-        #[clap(value_enum)]
+        #[arg(value_enum)]
         provider: Provider,
         /// Target location of the file. Defaults to `<provider>-export.<ext>` in the current
         /// folder, where the extension depends on the provider's format.
+        #[arg(value_hint = ValueHint::FilePath)]
         file: Option<PathBuf>,
     },
     /// Search for a single account and print the current OTP.
@@ -70,7 +72,7 @@ enum Command {
     /// Generate auto-completion scripts for various shells.
     Completion {
         /// Shell to generate an auto-completion script for.
-        #[clap(value_enum)]
+        #[arg(value_enum)]
         shell: Shell,
     },
 }

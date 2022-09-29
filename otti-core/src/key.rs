@@ -7,7 +7,7 @@ use serde::{
 };
 
 /// The key/secret of an **Otti** account that should be kept private as much as possible.
-#[cfg_attr(test, derive(Debug, PartialEq))]
+#[cfg_attr(test, derive(Debug, Eq, PartialEq))]
 pub struct Key(Vec<u8>);
 
 impl Key {
