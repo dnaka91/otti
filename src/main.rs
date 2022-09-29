@@ -70,7 +70,7 @@ enum Command {
         label: Option<String>,
     },
     /// Generate auto-completion scripts for various shells.
-    Completion {
+    Completions {
         /// Shell to generate an auto-completion script for.
         #[arg(value_enum)]
         shell: Shell,
@@ -131,7 +131,7 @@ fn main() -> Result<()> {
             file,
         } => export(password, provider, file),
         Command::Show { issuer, label } => show(&issuer, label.as_deref()),
-        Command::Completion { shell } => completion(shell),
+        Command::Completions { shell } => completions(shell),
     })
 }
 
@@ -225,11 +225,11 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
 }
 
 #[allow(clippy::unnecessary_wraps)]
-fn completion(shell: Shell) -> Result<()> {
+fn completions(shell: Shell) -> Result<()> {
     clap_complete::generate(
         shell,
         &mut Opt::command(),
-        env!("CARGO_BIN_NAME"),
+        env!("CARGO_PKG_NAME"),
         &mut io::stdout().lock(),
     );
     Ok(())
