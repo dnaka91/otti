@@ -668,7 +668,7 @@ checksum = "9ff7415e9ae3fff1225851df9e0d9e4e5479f947619774677a63572e55e80eff"
 
 [[package]]
 name = "otti"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "anyhow",
  "arboard",
@@ -692,7 +692,7 @@ dependencies = [
 
 [[package]]
 name = "otti-core"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "data-encoding",
  "percent-encoding",
@@ -705,7 +705,7 @@ dependencies = [
 
 [[package]]
 name = "otti-gen"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "hmac",
  "otti-core",
@@ -716,7 +716,7 @@ dependencies = [
 
 [[package]]
 name = "otti-store"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "directories",
  "flate2",
@@ -857,7 +857,7 @@ dependencies = [
 
 [[package]]
 name = "provider-aegis"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "aes-gcm",
  "base64",
@@ -877,7 +877,7 @@ dependencies = [
 
 [[package]]
 name = "provider-andotp"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "aes-gcm",
  "bytes",
@@ -894,7 +894,7 @@ dependencies = [
 
 [[package]]
 name = "provider-authpro"
-version = "0.2.4"
+version = "0.2.5"
 dependencies = [
  "aes",
  "base64",
