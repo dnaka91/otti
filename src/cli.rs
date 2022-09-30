@@ -11,7 +11,7 @@ use clap_complete::Shell;
 #[derive(Parser)]
 #[command(about, author, version, propagate_version = true)]
 pub struct Opt {
-    #[structopt(subcommand)]
+    #[command(subcommand)]
     pub cmd: Option<Command>,
 }
 
