@@ -8,8 +8,13 @@ use anyhow::{ensure, Context, Result};
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
 use clap_complete::Shell;
 
+/// The one-time password (OTP for short) manager for the terminal, with interactive and fancy
+/// terminal user interface (TUI for short).
+///
+/// Use any of the available commands to manage OTP accounts, like import/export. Or pass no
+/// command, to start up the interactive TUI.
 #[derive(Parser)]
-#[command(about, author, version, propagate_version = true)]
+#[command(author, version, propagate_version = true)]
 pub struct Opt {
     #[command(subcommand)]
     pub cmd: Option<Command>,
@@ -50,7 +55,9 @@ pub enum Command {
     },
     /// Search for a single account and print the current OTP.
     Show {
+        /// Name of the issuer to search by.
         issuer: String,
+        /// Optional label to further restrict the search to a single entry.
         label: Option<String>,
     },
     /// Generate auto-completion scripts for various shells.
@@ -81,6 +88,8 @@ pub enum Provider {
 }
 
 impl Provider {
+    /// Select the default export file name for a provider. This is used when the user doesn't
+    /// define a file name on their own.
     pub fn export_name(self, with_password: bool) -> &'static str {
         match self {
             Self::Aegis => {
@@ -108,6 +117,7 @@ impl Provider {
     }
 }
 
+/// Generate shell completions, written to the standard output.
 #[allow(clippy::unnecessary_wraps)]
 pub fn completions(shell: Shell) -> Result<()> {
     clap_complete::generate(
@@ -119,6 +129,8 @@ pub fn completions(shell: Shell) -> Result<()> {
     Ok(())
 }
 
+/// Generate man pages in the target directory. The directory must already exist and none of the
+/// files exist, or an error is returned.
 pub fn manpages(dir: &Path) -> Result<()> {
     fn print(dir: &Path, app: &clap::Command) -> Result<()> {
         let name = app.get_display_name().unwrap_or_else(|| app.get_name());
