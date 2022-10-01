@@ -53,6 +53,15 @@ cargo install --git https://github.com/dnaka91/otti.git --tag v0.1.0
 You can omit the `--tag` flag to install the latest development version, but make backups of your
 store file just in case.
 
+
+### From AUR
+
+Arch Linux users can install **Otti** from the [AUR](https://aur.archlinux.org/) using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers). For example:
+
+```sh
+paru -S otti
+```
+
 ## Usage
 
 Currently **Otti** is read-only, that means you can not add any new accounts to its database.
