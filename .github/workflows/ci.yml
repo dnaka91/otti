@@ -17,7 +17,7 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
       - name: Configure cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
       - name: Test
         run: cargo test --workspace
   lint:
@@ -37,7 +37,7 @@ jobs:
         with:
           components: clippy
       - name: Configure cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
       - name: Run clippy
         run: cargo clippy -- -D warnings
   cargo-deny:
