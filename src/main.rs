@@ -66,7 +66,7 @@ fn import(password: Option<String>, provider: Provider, file: PathBuf) -> Result
     if otti_store::exists()? {
         println!("An OTP store already exists");
 
-        let resp = rprompt::prompt_reply_stdout("Overwrite? [yN] ")?;
+        let resp = rprompt::prompt_reply("Overwrite? [yN] ")?;
 
         if !matches!(resp.as_str(), "y" | "Y") {
             println!("Import cancelled");
@@ -114,7 +114,7 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
             .map_or(false, |i| i.to_lowercase().contains(&issuer))
             && label
                 .as_deref()
-                .map_or(true, |l| a.label.to_lowercase().contains(&l))
+                .map_or(true, |l| a.label.to_lowercase().contains(l))
     });
 
     match acc {

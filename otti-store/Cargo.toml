@@ -8,10 +8,10 @@ license.workspace = true
 
 [dependencies]
 directories = "4.0.1"
-flate2 = "1.0.24"
+flate2 = "1.0.25"
 orion = "0.17.2"
 otti-core = { path = "../otti-core" }
 rmp-serde = "1.1.1"
 secrecy = "0.8.0"
-serde = { version = "1.0.145", features = ["derive"] }
+serde = { version = "1.0.148", features = ["derive"] }
 thiserror = "1.0.37"
