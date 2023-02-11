@@ -11,4 +11,4 @@ hmac = { version = "0.12.1", features = ["std"] }
 otti-core = { path = "../otti-core" }
 sha1 = "0.10.5"
 sha2 = "0.10.6"
-thiserror = "1.0.37"
+thiserror = "1.0.38"

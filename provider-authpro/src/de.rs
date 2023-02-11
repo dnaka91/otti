@@ -6,13 +6,15 @@ use serde::{
 };
 
 pub mod base64_string {
+    use base64::engine::{general_purpose, Engine};
+
     use super::*;
 
     pub fn serialize<S>(value: &[u8], serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        serializer.serialize_str(&base64::encode(value))
+        serializer.serialize_str(&general_purpose::STANDARD.encode(value))
     }
 
     pub fn deserialize<'de, D>(deserializer: D) -> Result<Vec<u8>, D::Error>
@@ -35,7 +37,9 @@ pub mod base64_string {
         where
             E: de::Error,
         {
-            base64::decode(v).map_err(|e| de::Error::custom(e.to_string()))
+            general_purpose::STANDARD
+                .decode(v)
+                .map_err(|e| de::Error::custom(e.to_string()))
         }
     }
 }
