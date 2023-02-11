@@ -41,7 +41,7 @@ pub mod base32_string {
         {
             data_encoding::BASE32_NOPAD
                 .decode(v.as_bytes())
-                .map_err(|e| de::Error::custom(format!("failed decoding `{}`: {}", v, e)))
+                .map_err(|e| de::Error::custom(format!("failed decoding `{v}`: {e}")))
         }
     }
 }

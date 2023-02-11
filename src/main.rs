@@ -127,12 +127,12 @@ fn show(issuer: &str, label: Option<&str>) -> Result<()> {
                 acc.issuer.as_deref().unwrap_or_default(),
                 acc.label
             );
-            println!("{}", code);
+            println!("{code}");
         }
         None => {
-            print!("no entry found containing issuer `{}`", issuer,);
+            print!("no entry found containing issuer `{issuer}`");
             match label {
-                Some(label) => println!(" and label `{}`.", label),
+                Some(label) => println!(" and label `{label}`."),
                 None => println!("."),
             }
         }
@@ -185,7 +185,7 @@ fn run() -> Result<()> {
             let gauge = Gauge::default()
                 .block(Block::default().borders(Borders::ALL))
                 .gauge_style(Style::default().fg(Color::Green).bg(Color::DarkGray))
-                .label(format!("{}s", counter))
+                .label(format!("{counter}s"))
                 .percent(counter * 100 / 30);
 
             let list = List::new(&accounts)

@@ -55,7 +55,7 @@ impl TryFrom<&str> for ParamsAlgorithm {
         } else if s.eq_ignore_ascii_case("sha512") {
             Algorithm::Sha512
         } else {
-            return Err(format!("unsupported algorithm `{}`", s));
+            return Err(format!("unsupported algorithm `{s}`"));
         }))
     }
 }
