@@ -1,4 +1,4 @@
-use tui::{buffer::Buffer, layout::Rect, style::Color, widgets::Widget};
+use ratatui::{buffer::Buffer, layout::Rect, style::Color, widgets::Widget};
 
 pub struct ScrollBar {
     value: usize,

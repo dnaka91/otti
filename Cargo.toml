@@ -24,24 +24,24 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-anyhow = "1.0.69"
+anyhow = "1.0.70"
 arboard = { version = "3.2.0", default-features = false }
-clap = { version = "4.1.4", features = ["derive"] }
-clap_complete = "4.1.1"
-clap_mangen = "0.2.7"
-crossbeam-channel = "0.5.6"
-crossterm = "0.25.0"
-indoc = "2.0.0"
+clap = { version = "4.2.1", features = ["derive"] }
+clap_complete = "4.2.0"
+clap_mangen = "0.2.10"
+crossbeam-channel = "0.5.7"
+crossterm = "0.26.1"
+indoc = "2.0.1"
 otti-core = { path = "./otti-core" }
 otti-gen = { path = "./otti-gen" }
 otti-store = { path = "./otti-store" }
 provider-aegis = { path = "./provider-aegis" }
 provider-andotp = { path = "./provider-andotp" }
 provider-authpro = { path = "./provider-authpro" }
+ratatui = "0.20.1"
 rpassword = "7.2.0"
 rprompt = "2.0.2"
 secrecy = "0.8.0"
-tui = { version = "0.19.0", default-features = false, features = ["crossterm"] }
 
 [profile.release]
 lto = true

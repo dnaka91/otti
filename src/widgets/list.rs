@@ -1,5 +1,5 @@
 use otti_core::Account;
-use tui::{
+use ratatui::{
     buffer::Buffer,
     layout::Rect,
     style::Color,

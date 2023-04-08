@@ -1,5 +1,5 @@
 use indoc::indoc;
-use tui::{
+use ratatui::{
     buffer::Buffer,
     layout::{Margin, Rect},
     widgets::{Block, Borders, Clear, Paragraph, Widget, Wrap},

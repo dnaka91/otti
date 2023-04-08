@@ -23,6 +23,8 @@ use sha1::Sha1;
 pub enum Error {
     #[error("the import data is too short")]
     InputTooShort,
+    #[error("the cryptographic key length didn't match the cipher")]
+    InvalidLength(#[from] pbkdf2::hmac::digest::InvalidLength),
     #[error("data en-/decryption failed")]
     AesGcm(#[from] aes_gcm::Error),
     #[error("JSON (de-)serialization failed")]
@@ -146,7 +148,7 @@ fn decrypt(data: &mut impl Buf, password: impl AsRef<[u8]>) -> Result<Vec<u8>, E
 
     let mut key = [0_u8; 32];
 
-    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, pbkdf2_iterations, &mut key);
+    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, pbkdf2_iterations, &mut key)?;
 
     let key = GenericArray::from_slice(&key);
     let cipher = Aes256Gcm::new(key);
@@ -168,7 +170,7 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
 
     let mut key = [0_u8; 32];
 
-    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, pbkdf2_iterations, &mut key);
+    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, pbkdf2_iterations, &mut key)?;
 
     let key = GenericArray::from_slice(&key);
     let cipher = Aes256Gcm::new(key);

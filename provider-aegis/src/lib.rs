@@ -279,7 +279,12 @@ fn decrypt(data: &mut impl Buf, password: impl AsRef<[u8]>) -> Result<Vec<u8>, E
     scrypt::scrypt(
         password.as_ref(),
         &salt,
-        &ScryptParams::new(f64::from(n).log2() as u8, r, p)?,
+        &ScryptParams::new(
+            f64::from(n).log2() as u8,
+            r,
+            p,
+            ScryptParams::RECOMMENDED_LEN,
+        )?,
         &mut key,
     )?;
 
@@ -313,7 +318,7 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
     scrypt::scrypt(
         password.as_ref(),
         &salt,
-        &ScryptParams::new(log_n, r, p)?,
+        &ScryptParams::new(log_n, r, p, ScryptParams::RECOMMENDED_LEN)?,
         &mut key,
     )?;
 

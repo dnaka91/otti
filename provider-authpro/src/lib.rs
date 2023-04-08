@@ -25,6 +25,8 @@ mod de;
 pub enum Error {
     #[error("the import data is too short")]
     InputTooShort,
+    #[error("the cryptographic key length doesn't match the cipher")]
+    InvalidLength(#[from] pbkdf2::hmac::digest::InvalidLength),
     #[error("data decryption failed")]
     Aes(#[from] block_padding::UnpadError),
     #[error("JSON (de-)serialization failed")]
@@ -212,7 +214,7 @@ fn decrypt(data: &mut impl Buf, password: impl AsRef<[u8]>) -> Result<Vec<u8>, E
 
     let mut key = [0_u8; KEY_SIZE];
 
-    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, PBKDF2_ROUNDS, &mut key);
+    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, PBKDF2_ROUNDS, &mut key)?;
 
     let key = GenericArray::from_slice(&key);
     let aes_iv = GenericArray::from_slice(&aes_iv);
@@ -230,7 +232,7 @@ fn encrypt(wr: &mut impl BufMut, data: &[u8], password: impl AsRef<[u8]>) -> Res
 
     let mut key = [0_u8; KEY_SIZE];
 
-    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, PBKDF2_ROUNDS, &mut key);
+    pbkdf2::pbkdf2::<Hmac<Sha1>>(password.as_ref(), &pbkdf2_salt, PBKDF2_ROUNDS, &mut key)?;
 
     let key = GenericArray::from_slice(&key);
     let cipher = <cbc::Encryptor<Aes256>>::new(key, &aes_iv);

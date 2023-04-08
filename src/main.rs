@@ -15,12 +15,12 @@ use anyhow::Result;
 use arboard::Clipboard;
 use crossbeam_channel::select;
 use crossterm::event::KeyCode;
-use secrecy::SecretString;
-use tui::{
+use ratatui::{
     layout::{Constraint, Direction, Layout},
     style::{Color, Style},
     widgets::{Block, Borders, Gauge},
 };
+use secrecy::SecretString;
 use widgets::CodeDialog;
 
 use crate::{

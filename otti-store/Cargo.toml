@@ -7,11 +7,11 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-directories = "4.0.1"
+directories = "5.0.0"
 flate2 = "1.0.25"
-orion = "0.17.3"
+orion = "0.17.4"
 otti-core = { path = "../otti-core" }
 rmp-serde = "1.1.1"
 secrecy = "0.8.0"
-serde = { version = "1.0.152", features = ["derive"] }
-thiserror = "1.0.38"
+serde = { version = "1.0.159", features = ["derive"] }
+thiserror = "1.0.40"
