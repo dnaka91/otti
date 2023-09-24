@@ -25,6 +25,8 @@ mod de;
 pub enum Error {
     #[error("the import data is too short")]
     InputTooShort,
+    #[error("the data header was invalid")]
+    InvalidHeader,
     #[error("the cryptographic key length doesn't match the cipher")]
     InvalidLength(#[from] pbkdf2::hmac::digest::InvalidLength),
     #[error("data decryption failed")]
@@ -207,7 +209,9 @@ fn decrypt(data: &mut impl Buf, password: impl AsRef<[u8]>) -> Result<Vec<u8>, E
     }
 
     let header = data.copy_to_bytes(HEADER.len());
-    if header != HEADER.as_bytes() {}
+    if header != HEADER.as_bytes() {
+        return Err(Error::InvalidHeader);
+    }
 
     let pbkdf2_salt = data.copy_to_bytes(SALT_SIZE);
     let aes_iv = data.copy_to_bytes(BLOCK_SIZE);
