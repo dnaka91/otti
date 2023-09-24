@@ -7,13 +7,13 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-data-encoding = "2.3.3"
-percent-encoding = { version = "2.2.0", optional = true }
+data-encoding = "2.4.0"
+percent-encoding = { version = "2.3.0", optional = true }
 secrecy = { version = "0.8.0", features = ["serde"] }
-serde = { version = "1.0.159", features = ["derive"] }
+serde = { version = "1.0.188", features = ["derive"] }
 serde_qs = { version = "0.12.0", optional = true }
-thiserror = "1.0.40"
-url = { version = "2.3.1", optional = true }
+thiserror = "1.0.48"
+url = { version = "2.4.1", optional = true }
 
 [features]
 default = ["otpurl"]

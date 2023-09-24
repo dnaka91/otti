@@ -157,7 +157,11 @@ mod tests {
 
     #[test]
     fn account_from_string() {
-        let account= parse("otpauth://totp/Test%20This:me?secret=JBSWY3DPEHPK3PXP&algorithm=sha256&digits=8&period=60").unwrap();
+        let account = parse(
+            "otpauth://totp/Test%20This:me?secret=JBSWY3DPEHPK3PXP&algorithm=sha256&digits=8&\
+             period=60",
+        )
+        .unwrap();
         let expect = Account {
             label: "me".to_owned(),
             secret: Key::new(vec![72, 101, 108, 108, 111, 33, 222, 173, 190, 239]),

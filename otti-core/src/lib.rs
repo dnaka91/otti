@@ -72,16 +72,16 @@ pub enum Otp {
     /// Time based, using the current time with a maximum delay (the `window`).
     ///
     /// Generated OTPs are considered valid from the point of generation until the window, which
-    /// describes seconds, has passed. As there can be timing differences between client and server,
-    /// it is common that the server accepts at least 1-2 old OTPs. Otherwise the input could fail
-    /// due to being generated at the end of the window, giving no time for the user to copy in and
-    /// send the OTP.
+    /// describes seconds, has passed. As there can be timing differences between client and
+    /// server, it is common that the server accepts at least 1-2 old OTPs. Otherwise the input
+    /// could fail due to being generated at the end of the window, giving no time for the user
+    /// to copy in and send the OTP.
     Totp {
         /// Seconds that an OTP is considered valid.
         window: u64,
     },
-    /// Steam specific OTP, very similar to [`Self::Totp`] but uses a different alphabet to generate
-    /// codes.
+    /// Steam specific OTP, very similar to [`Self::Totp`] but uses a different alphabet to
+    /// generate codes.
     Steam {
         /// Same as the `window` in a TOTP, describing the amount of time in seconds an OTP is
         /// considered valid.

@@ -1,6 +1,7 @@
 [licenses]
 allow-osi-fsf-free = "both"
 exceptions = [
+    { allow = ["MPL-2.0"], name = "option-ext" },
     { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
 ]
 
@@ -9,5 +10,6 @@ ignore = true
 
 [bans]
 skip = [
-    { name = "windows-sys", version = "=0.42.0" },
+	{ name = "bitflags", version = "1" },
+    { name = "redox_syscall", version = "0.2" },
 ]

@@ -6,6 +6,9 @@
 #![deny(rust_2018_idioms, clippy::all, clippy::pedantic)]
 #![allow(clippy::missing_errors_doc)]
 
+mod aead;
+mod kdf;
+
 use std::{
     convert::TryFrom,
     fmt::{self, Display},
@@ -19,13 +22,11 @@ use flate2::{
     write::{ZlibDecoder, ZlibEncoder},
     Compression,
 };
-use orion::{
-    aead,
-    kdf::{self, Password, Salt},
-};
 use otti_core::{Account, ExposeSecret};
 pub use secrecy::{Secret, SecretString};
 use serde::{Deserialize, Serialize};
+
+use self::kdf::{Password, Salt};
 
 /// Errors that can occur when sealing or opening an otti store.
 #[derive(Debug, thiserror::Error)]
@@ -51,7 +52,7 @@ pub enum Error {
     Decode(#[from] rmp_serde::decode::Error),
     /// A cryptographic error occurred.
     #[error("cryptographic error")]
-    Crypto(#[from] orion::errors::UnknownCryptoError),
+    Crypto,
     /// The given password to open a store was invalid.
     #[error("password is invalid")]
     InvalidPassword,
@@ -164,7 +165,7 @@ fn compress(data: &[u8]) -> Result<Vec<u8>, Error> {
 }
 
 fn decrypt(encrypted: &EncryptedFile, password: &SecretString) -> Result<Vec<u8>, Error> {
-    let password = Password::from_slice(password.expose_secret().as_bytes())?;
+    let password = Password::from_slice(password.expose_secret().as_bytes());
     let salt = Salt::from_slice(&encrypted.salt)?;
     let key = kdf::derive_key(&password, &salt, encrypted.iterations, encrypted.memory, 32)?;
 
@@ -172,7 +173,7 @@ fn decrypt(encrypted: &EncryptedFile, password: &SecretString) -> Result<Vec<u8>
 }
 
 fn encrypt(data: &[u8], password: &SecretString) -> Result<EncryptedFile, Error> {
-    let password = Password::from_slice(password.expose_secret().as_bytes())?;
+    let password = Password::from_slice(password.expose_secret().as_bytes());
     let salt = Salt::default();
     let key = kdf::derive_key(&password, &salt, 3, 1 << 16, 32)?;
 

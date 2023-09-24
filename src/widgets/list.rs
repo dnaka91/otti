@@ -77,7 +77,7 @@ impl<'a> StatefulWidget for List<'a> {
             if area.y >= list_area.bottom() {
                 break;
             }
-            Paragraph::new(item.label.as_ref()).render(area, buf);
+            Paragraph::new(item.label.as_str()).render(area, buf);
 
             // Draw the item issuer
             area.y += 1;
@@ -85,7 +85,7 @@ impl<'a> StatefulWidget for List<'a> {
                 break;
             }
             if let Some(issuer) = &item.issuer {
-                Paragraph::new(issuer.as_ref()).render(area, buf);
+                Paragraph::new(issuer.as_str()).render(area, buf);
             }
 
             // Draw the separator

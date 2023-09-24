@@ -24,21 +24,21 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-anyhow = "1.0.70"
-arboard = { version = "3.2.0", default-features = false }
-clap = { version = "4.2.1", features = ["derive"] }
-clap_complete = "4.2.0"
-clap_mangen = "0.2.10"
-crossbeam-channel = "0.5.7"
-crossterm = "0.26.1"
-indoc = "2.0.1"
+anyhow = "1.0.75"
+arboard = { version = "3.2.1", default-features = false }
+clap = { version = "4.4.4", features = ["derive"] }
+clap_complete = "4.4.1"
+clap_mangen = "0.2.14"
+crossbeam-channel = "0.5.8"
+crossterm = "0.27.0"
+indoc = "2.0.4"
 otti-core = { path = "./otti-core" }
 otti-gen = { path = "./otti-gen" }
 otti-store = { path = "./otti-store" }
 provider-aegis = { path = "./provider-aegis" }
 provider-andotp = { path = "./provider-andotp" }
 provider-authpro = { path = "./provider-authpro" }
-ratatui = "0.20.1"
+ratatui = "0.23.0"
 rpassword = "7.2.0"
 rprompt = "2.0.2"
 secrecy = "0.8.0"
