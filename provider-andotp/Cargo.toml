@@ -13,10 +13,10 @@ hmac = "0.12.1"
 otti-core = { path = "../otti-core" }
 pbkdf2 = { version = "0.12.2", default-features = false }
 rand = "0.8.5"
-serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.107"
+serde = { version = "1.0.196", features = ["derive"] }
+serde_json = "1.0.113"
 sha1 = "0.10.6"
-thiserror = "1.0.48"
+thiserror = "1.0.56"
 
 [dev-dependencies]
 pretty_assertions = "1.4.0"
